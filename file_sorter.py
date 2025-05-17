@@ -1,4 +1,5 @@
 import textwrap
+import shutil
 from pathlib import Path
 
 
@@ -82,6 +83,21 @@ def move_file(parent_folder_path):
         "Other": [],
         "Videos": [".mp4", ".mkv", ".mov", ".avi", ".flv", ".wmv", ".webm"]
     }
+    for source_file_path in parent_folder_path.iterdir():
+        if source_file_path.is_dir():
+            continue
+        for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
+            try:
+                if source_file_path.suffix in child_folder_extensions:
+                    shutil.move(source_file_path, source_file_path.parent /
+                                child_folder / source_file_path.name)
+                    break
+            except Exception as error:
+                print(f"An error occurred: {error}")
+                break
+        else:
+            shutil.move(source_file_path, source_file_path.parent /
+                        "Other" / source_file_path.name)
 
 
 def main():
