@@ -47,6 +47,15 @@ def create_child_folders():
             print(
                 "\nInvalid path entered 3 times. Defaulting to current working directory.", end=" ")
             default_path = Path.cwd()
+    for folder in child_list:
+        try:
+            child_folder_path = default_path / folder if default_path else parent_path / folder
+            child_folder_path.mkdir(exist_ok=True)
+        except Exception as error:
+            print(f"An error occurred: {error}")
+            break
+    else:
+        print("Folders created successfully.")
 
 
 def list_files():
