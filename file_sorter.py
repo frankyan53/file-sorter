@@ -67,7 +67,17 @@ def categorize_file():
 
 
 def move_file():
-    pass
+    parent_path =
+    child_extensions_dict = {
+        "Documents": [".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".rtf", ".odt"],
+        "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
+        "Videos": [".mp4", ".mkv", ".mov", ".avi", ".flv", ".wmv", ".webm"],
+        "Audio": [".mp3", ".wav", ".aac", ".flac", ".ogg", ".m4a"],
+        "Archives": [".zip", ".rar", ".tar", ".gz", ".7z", ".bz2"],
+        "Code": [".py", ".js", ".html", ".css", ".cpp", ".c", ".java", ".rb", ".sh", ".json", ".xml", ".ipynb"],
+        "Executables": [".exe", ".msi", ".dmg", ".pkg", ".bat", ".sh"],
+        "Other": []
+    }
 
 
 def main():
