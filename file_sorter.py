@@ -51,8 +51,8 @@ def get_parent_folder_path():
 
 
 def create_child_folders(parent_folder_path):
-    child_folder_list = ["Archives", "Audio", "Code", "Documents",
-                         "Executables", "Images", "Other", "Videos"]
+    child_folder_list = ["3D Models", "Archives", "Audio", "Code", "Documents",
+                         "Executables", "Fonts", "Images", "Other", "Spreadsheets", "Videos"]
     for folder in child_folder_list:
         try:
             child_folder_path = parent_folder_path / folder
@@ -74,14 +74,17 @@ def categorize_file():
 
 def move_file(parent_folder_path):
     child_folder_extensions_dict = {
-        "Archives": [".zip", ".rar", ".tar", ".gz", ".7z", ".bz2"],
-        "Audio": [".mp3", ".wav", ".aac", ".flac", ".ogg", ".m4a"],
-        "Code": [".py", ".js", ".html", ".css", ".cpp", ".c", ".java", ".rb", ".sh", ".json", ".xml", ".ipynb"],
-        "Documents": [".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".rtf", ".odt"],
-        "Executables": [".exe", ".msi", ".dmg", ".pkg", ".bat", ".sh"],
-        "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
+        "3D Models": [".obj", ".fbx", ".stl", ".3ds", ".dae", ".blend", ".gltf", ".glb", ".x3d"],
+        "Archives": [".zip", ".rar", ".tar", ".gz", ".7z", ".bz2", ".xz", ".cab", ".iso", ".lz", ".lzma", ".z", ".ace", ".arj", ".jar"],
+        "Audio": [".mp3", ".wav", ".aac", ".flac", ".ogg", ".m4a", ".wma", ".alac", ".aiff", ".amr", ".mid", ".midi", ".opus", ".ra", ".pcm"],
+        "Code": [".py", ".js", ".html", ".css", ".cpp", ".c", ".java", ".rb", ".sh", ".json", ".xml", ".ipynb", ".php", ".go", ".rs", ".swift", ".ts", ".tsx", ".jsx", ".cs", ".vb", ".kt", ".scala", ".pl", ".lua", ".sql", ".yml", ".yaml", ".bat", ".cmd", ".ini", ".cfg"],
+        "Documents": [".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".rtf", ".odt", ".odp", ".ods", ".epub", ".md", ".tex", ".log", ".csv", ".pages", ".numbers", ".key", ".xps"],
+        "Executables": [".exe", ".msi", ".dmg", ".pkg", ".bat", ".sh", ".app", ".deb", ".rpm", ".run", ".apk", ".bin", ".com", ".command", ".gadget"],
+        "Fonts": [".ttf", ".otf", ".woff", ".woff2", ".eot", ".fon"],
+        "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".tif", ".webp", ".svg", ".heic", ".ico", ".raw", ".cr2", ".nef", ".orf", ".sr2", ".psd", ".ai", ".eps"],
         "Other": [],
-        "Videos": [".mp4", ".mkv", ".mov", ".avi", ".flv", ".wmv", ".webm"]
+        "Spreadsheets": [".xls", ".xlsx", ".ods", ".csv", ".tsv"],
+        "Videos": [".mp4", ".mkv", ".mov", ".avi", ".flv", ".wmv", ".webm", ".mpeg", ".mpg", ".3gp", ".m4v", ".ts", ".mts", ".vob", ".rm", ".rmvb"]
     }
     for source_file_path in parent_folder_path.iterdir():
         if source_file_path.is_dir():
