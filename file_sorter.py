@@ -31,24 +31,27 @@ def get_operating_system():
         print()
         print(textwrap.fill("Open your file manager (e.g. Nautilus), find the folder, then right-click and choose \"Properties.\" Copy the full path, and paste it when prompted. Alternatively, open Terminal and drag the folder into the window to show the full path.", 80))
         print()
-def create_child_folders():
-    child_list = ["Archives", "Audio", "Code", "Documents",
-                  "Executables", "Images", "Other", "Videos"]
-    default_path = None
+
+
+def get_parent_path():
     get_operating_system()
     for i in range(3, 0, -1):
         parent_path_input = input(
             f"Enter folder path ({i} attempts remaining): ").replace("\\", "/").strip()
         parent_path = Path(parent_path_input)
         if parent_path.exists() and parent_path.is_dir():
-            print()
-            break
-        elif i != 1:
+            return parent_path
+        if i != 1:
             print(f"Invalid folder path. Please try again.", end=" ")
         else:
             print(
                 "\nInvalid path entered 3 times. Defaulting to current working directory.", end=" ")
-            default_path = Path.cwd()
+            return Path.cwd()
+
+
+def create_child_folders(parent_path):
+    child_list = ["Archives", "Audio", "Code", "Documents",
+                  "Executables", "Images", "Other", "Videos"]
     for folder in child_list:
         try:
             child_folder_path = default_path / folder if default_path else parent_path / folder
