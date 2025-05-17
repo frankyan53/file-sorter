@@ -32,8 +32,8 @@ def get_operating_system():
         print(textwrap.fill("Open your file manager (e.g. Nautilus), find the folder, then right-click and choose \"Properties.\" Copy the full path, and paste it when prompted. Alternatively, open Terminal and drag the folder into the window to show the full path.", 80))
         print()
 def create_child_folders():
-    child_list = ["Documents", "Images", "Videos", "Audio",
-                  "Archives", "Code", "Executables", "Other"]
+    child_list = ["Archives", "Audio", "Code", "Documents",
+                  "Executables", "Images", "Other", "Videos"]
     default_path = None
     get_operating_system()
     for i in range(3, 0, -1):
@@ -71,14 +71,14 @@ def categorize_file():
 def move_file():
     parent_path =
     child_extensions_dict = {
-        "Documents": [".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".rtf", ".odt"],
-        "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
-        "Videos": [".mp4", ".mkv", ".mov", ".avi", ".flv", ".wmv", ".webm"],
-        "Audio": [".mp3", ".wav", ".aac", ".flac", ".ogg", ".m4a"],
         "Archives": [".zip", ".rar", ".tar", ".gz", ".7z", ".bz2"],
+        "Audio": [".mp3", ".wav", ".aac", ".flac", ".ogg", ".m4a"],
         "Code": [".py", ".js", ".html", ".css", ".cpp", ".c", ".java", ".rb", ".sh", ".json", ".xml", ".ipynb"],
+        "Documents": [".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".rtf", ".odt"],
         "Executables": [".exe", ".msi", ".dmg", ".pkg", ".bat", ".sh"],
-        "Other": []
+        "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
+        "Other": [],
+        "Videos": [".mp4", ".mkv", ".mov", ".avi", ".flv", ".wmv", ".webm"]
     }
 
 
