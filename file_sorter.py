@@ -64,7 +64,7 @@ def create_child_folders(parent_folder_path):
         print("Folders created successfully.")
 
 
-def move_file(parent_folder_path):
+def move_files(parent_folder_path):
     child_folder_extensions_dict = {
         "3D Models": [".obj", ".fbx", ".stl", ".3ds", ".dae", ".blend", ".gltf", ".glb", ".x3d"],
         "Archives": [".zip", ".rar", ".tar", ".gz", ".7z", ".bz2", ".xz", ".cab", ".iso", ".lz", ".lzma", ".z", ".ace", ".arj", ".jar"],
