@@ -2,10 +2,7 @@ import textwrap
 from pathlib import Path
 
 
-def create_child_folders():
-    child_list = ["Images", "Videos", "Audio", "Documents",
-                  "Archives", "Code", "Executables", "Other"]
-    default_path = None
+def get_operating_system():
     print("""Below is a list of operating systems.
 1. Windows
 2. macOS
@@ -34,6 +31,11 @@ def create_child_folders():
         print()
         print(textwrap.fill("Open your file manager (e.g. Nautilus), find the folder, then right-click and choose \"Properties.\" Copy the full path, and paste it when prompted. Alternatively, open Terminal and drag the folder into the window to show the full path.", 80))
         print()
+def create_child_folders():
+    child_list = ["Documents", "Images", "Videos", "Audio",
+                  "Archives", "Code", "Executables", "Other"]
+    default_path = None
+    get_operating_system()
     for i in range(3, 0, -1):
         parent_path_input = input(
             f"Enter folder path ({i} attempts remaining): ").replace("\\", "/").strip()
