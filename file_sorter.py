@@ -33,14 +33,14 @@ def get_operating_system():
         print()
 
 
-def get_parent_path():
+def get_parent_folder_path():
     get_operating_system()
     for i in range(3, 0, -1):
-        parent_path_input = input(
+        parent_folder_path_input = input(
             f"Enter folder path ({i} attempts remaining): ").replace("\\", "/").strip()
-        parent_path = Path(parent_path_input)
-        if parent_path.exists() and parent_path.is_dir():
-            return parent_path
+        parent_folder_path = Path(parent_folder_path_input)
+        if parent_folder_path.exists() and parent_folder_path.is_dir():
+            return parent_folder_path
         if i != 1:
             print(f"Invalid folder path. Please try again.", end=" ")
         else:
@@ -49,12 +49,12 @@ def get_parent_path():
             return Path.cwd()
 
 
-def create_child_folders(parent_path):
-    child_list = ["Archives", "Audio", "Code", "Documents",
-                  "Executables", "Images", "Other", "Videos"]
-    for folder in child_list:
+def create_child_folders(parent_folder_path):
+    child_folder_list = ["Archives", "Audio", "Code", "Documents",
+                         "Executables", "Images", "Other", "Videos"]
+    for folder in child_folder_list:
         try:
-            child_folder_path = default_path / folder if default_path else parent_path / folder
+            child_folder_path = parent_folder_path / folder
             child_folder_path.mkdir(exist_ok=True)
         except Exception as error:
             print(f"An error occurred: {error}")
@@ -71,9 +71,8 @@ def categorize_file():
     pass
 
 
-def move_file():
-    parent_path =
-    child_extensions_dict = {
+def move_file(parent_folder_path):
+    child_folder_extensions_dict = {
         "Archives": [".zip", ".rar", ".tar", ".gz", ".7z", ".bz2"],
         "Audio": [".mp3", ".wav", ".aac", ".flac", ".ogg", ".m4a"],
         "Code": [".py", ".js", ".html", ".css", ".cpp", ".c", ".java", ".rb", ".sh", ".json", ".xml", ".ipynb"],
