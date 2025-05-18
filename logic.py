@@ -38,12 +38,12 @@ def move_files(parent_folder_path):
             if source_file_path.suffix in child_folder_extensions:
                 child_folder_name = child_folder
                 original_destination_file_path = (
-                    source_file_path.parent / child_folder / source_file_path.name)
+                    source_file_path.parent / child_folder_name / source_file_path.name)
                 break
         else:
             child_folder_name = "Other"
             original_destination_file_path = (
-                source_file_path.parent / "Other" / source_file_path.name)
+                source_file_path.parent / child_folder_name / source_file_path.name)
         renamed_destination_file_path = get_unique_path(
             original_destination_file_path)
         shutil.move(source_file_path, renamed_destination_file_path)
