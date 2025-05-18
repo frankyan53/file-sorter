@@ -70,7 +70,7 @@ def move_files(parent_folder_path):
             errors.append({"source directory": str(source_file_path), "destination directory":
                           str(renamed_destination_file_path), "operation": "moving file", "error": str(error)})
     with open("errors.json", "w") as file:
-        json.dump(errors, file)
+        json.dump(errors, file, indent=4)
     return source_files_list, report_dict, renamed_files_list, errors
 
 
