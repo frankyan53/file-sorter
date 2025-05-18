@@ -62,7 +62,10 @@ def unsort_files(parent_folder_path):
         child_folders_list = json.load(file)
     for folder in child_folders_list:
         child_folder_path = parent_folder_path / folder
-        for destination_file_path in child_folder_path.iterdir():
-            source_file_path = parent_folder_path / destination_file_path.name
-            shutil.move(destination_file_path, source_file_path)
-        child_folder_path.rmdir()
+        if child_folder_path.exists():
+            for destination_file_path in child_folder_path.iterdir():
+                source_file_path = parent_folder_path / destination_file_path.name
+                shutil.move(destination_file_path, source_file_path)
+            child_folder_path.rmdir()
+        else:
+            continue
