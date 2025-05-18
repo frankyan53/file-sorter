@@ -3,6 +3,15 @@ import shutil
 from pathlib import Path
 
 
+def get_unique_path(destination_file_path):
+    counter = 1
+    while destination_file_path.exists():
+        destination_file_path = destination_file_path.with_stem(
+            f"{destination_file_path.stem}_{counter}")
+        counter += 1
+    return destination_file_path
+
+
 def create_child_folders(parent_folder_path):
     with open("child_folders.json") as file:
         child_folders_list = json.load(file)
@@ -25,8 +34,7 @@ def move_files(parent_folder_path):
             continue
         for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
             if source_file_path.suffix in child_folder_extensions:
-                shutil.move(source_file_path, source_file_path.parent /
-                            child_folder / source_file_path.name)
+                destination_file_path = get_unique_path(destination_file_path)
                 report[child_folder] += 1
                 break
         else:
