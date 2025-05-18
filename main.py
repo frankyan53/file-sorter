@@ -9,7 +9,7 @@ def main():
     else:
         print("Encountered error when creating folders. Exiting.")
         return
-    source_files, report_dict, renamed_files_list = move_files(
+    source_files_list, report_dict, renamed_files_list, errors_list = move_files(
         parent_folder_path)
     if not source_files:
         print("No files to sort.")

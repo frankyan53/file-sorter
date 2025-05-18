@@ -31,12 +31,18 @@ def move_files(parent_folder_path):
         child_folder_extensions_dict = json.load(file)
     report_dict = {
         child_folder: 0 for child_folder in child_folder_extensions_dict}
-    source_files = []
-    for source_file_path in parent_folder_path.iterdir():
-        source_files.append(source_file_path)
+    errors = []
+    try:
+        parent_files_gen = parent_folder_path.iterdir()
+    except Exception as error:
+        errors.append({"directory": str(parent_folder_path),
+                      "operation": "iterating through folder", "error": str(error)})
+        return source_files_list, report_dict, renamed_files_list, errors
+    for source_file_path in parent_files_gen:
         if source_file_path.is_dir():
             source_files.remove(source_file_path)
             continue
+        source_files_list.append(source_file_path)
         for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
             if source_file_path.suffix in child_folder_extensions:
                 child_folder_name = child_folder
@@ -47,14 +53,23 @@ def move_files(parent_folder_path):
             child_folder_name = "Other"
             original_destination_file_path = (
                 source_file_path.parent / child_folder_name / source_file_path.name)
-        renamed_destination_file_path = get_unique_path(
-            original_destination_file_path)
-        shutil.move(source_file_path, renamed_destination_file_path)
-        if original_destination_file_path != renamed_destination_file_path:
-            renamed_files_list.append(
-                {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
-        report_dict[child_folder_name] += 1
-    return source_files, report_dict, renamed_files_list
+        try:
+            renamed_destination_file_path = get_unique_path(
+                original_destination_file_path)
+        except Exception as error:
+            errors.append({"directory": str(original_destination_file_path),
+                          "operation": "renaming", "error": str(error)})
+            continue
+        try:
+            shutil.move(source_file_path, renamed_destination_file_path)
+            if original_destination_file_path != renamed_destination_file_path:
+                renamed_files_list.append(
+                    {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
+            report_dict[child_folder_name] += 1
+        except Exception as error:
+            errors.append({"source directory": str(source_file_path), "destination directory":
+                          renamed_destination_file_path, "operation": "moving", "error": str(error)})
+    return source_files_list, report_dict, renamed_files_list, errors
 
 
 def unsort_files(parent_folder_path):
