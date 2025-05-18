@@ -21,6 +21,9 @@ def main():
     for file in renamed_files_list:
         print(
             f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+    if errors_list:
+        print(
+            f"Encountered {len(errors_list)} error{"s" if len(errors_list) != 1 else ""} moving files. See \"errors.json\" for more details.")
     renamed_files_list = unsort_files(parent_folder_path)
     for file in renamed_files_list:
         print(

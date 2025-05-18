@@ -69,6 +69,8 @@ def move_files(parent_folder_path):
         except Exception as error:
             errors.append({"source directory": str(source_file_path), "destination directory":
                           renamed_destination_file_path, "operation": "moving", "error": str(error)})
+    with open("errors.json", "w") as file:
+        json.dump(errors, file)
     return source_files_list, report_dict, renamed_files_list, errors
 
 
