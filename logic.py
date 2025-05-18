@@ -76,20 +76,44 @@ def move_files(parent_folder_path):
 
 def unsort_files(parent_folder_path):
     renamed_files_list = []
+    unsort_files_errors = []
     with open("child_folders.json") as file:
         child_folders_list = json.load(file)
     for folder in child_folders_list:
         child_folder_path = parent_folder_path / folder
         if child_folder_path.exists():
-            for destination_file_path in child_folder_path.iterdir():
+            try:
+                child_files_gen = child_folder_path.iterdir()
+            except Exception as error:
+                unsort_files_errors.append({"directory": str(
+                    parent_folder_path), "operation": "iterating through folder", "error": str(error)})
+                return renamed_files_list, unsort_files_errors
+            for destination_file_path in child_files_gen:
                 original_source_file_path = parent_folder_path / destination_file_path.name
-                renamed_source_file_path = get_unique_path(
-                    original_source_file_path)
-                shutil.move(destination_file_path, renamed_source_file_path)
+                try:
+                    renamed_source_file_path = get_unique_path(
+                        original_source_file_path)
+                except Exception as error:
+                    unsort_files_errors.append(
+                        {"directory": str(original_source_file_path), "operation": "renaming file", "error": str(error)})
+                    continue
+                try:
+                    shutil.move(destination_file_path,
+                                renamed_source_file_path)
+                except Exception as error:
+                    unsort_files_errors.append({"source directory": str(destination_file_path), "destination directory": str(
+                        renamed_source_file_path), "operation": "moving file", "error": str(error)})
+                    continue
                 if original_source_file_path != renamed_source_file_path:
                     renamed_files_list.append(
                         {"original": original_source_file_path.name, "renamed": renamed_source_file_path.name})
-            child_folder_path.rmdir()
+            try:
+                child_folder_path.rmdir()
+            except Exception as error:
+                unsort_files_errors.append({"directory": str(
+                    child_folder_path), "operation": "deleting folder", "error": str(error)})
         else:
             continue
-    return renamed_files_list
+    with open("unsort_files_errors.json", "w") as file:
+        json.dump(unsort_files_errors, file, indent=4)
+    return renamed_files_list, unsort_files_errors
