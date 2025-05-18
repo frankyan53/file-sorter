@@ -33,7 +33,6 @@ def move_files(parent_folder_path):
         child_folder: 0 for child_folder in child_folder_extensions_dict}
     source_files = []
     for source_file_path in parent_folder_path.iterdir():
-        source_files = []
         source_files.append(source_file_path)
         if source_file_path.is_dir():
             source_files.remove(source_file_path)
@@ -56,3 +55,14 @@ def move_files(parent_folder_path):
                 {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
         report_dict[child_folder_name] += 1
     return source_files, report_dict, renamed_files_list
+
+
+def unsort_files(parent_folder_path):
+    with open("child_folders.json") as file:
+        child_folders_list = json.load(file)
+    for folder in child_folders_list:
+        child_folder_path = parent_folder_path / folder
+        for destination_file_path in child_folder_path.iterdir():
+            source_file_path = parent_folder_path / destination_file_path.name
+            shutil.move(destination_file_path, source_file_path)
+        child_folder_path.rmdir()

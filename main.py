@@ -1,5 +1,5 @@
 from cli import get_parent_folder_path
-from logic import create_child_folders, move_files
+from logic import create_child_folders, move_files, unsort_files
 
 
 def main():
