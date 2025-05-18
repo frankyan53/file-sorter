@@ -31,6 +31,7 @@ def move_files(parent_folder_path):
         child_folder_extensions_dict = json.load(file)
     report_dict = {
         child_folder: 0 for child_folder in child_folder_extensions_dict}
+    source_files_list = []
     errors = []
     try:
         parent_files_gen = parent_folder_path.iterdir()
@@ -40,7 +41,6 @@ def move_files(parent_folder_path):
         return source_files_list, report_dict, renamed_files_list, errors
     for source_file_path in parent_files_gen:
         if source_file_path.is_dir():
-            source_files.remove(source_file_path)
             continue
         source_files_list.append(source_file_path)
         for child_folder, child_folder_extensions in child_folder_extensions_dict.items():

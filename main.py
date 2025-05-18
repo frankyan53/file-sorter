@@ -11,7 +11,7 @@ def main():
         return
     source_files_list, report_dict, renamed_files_list, errors_list = move_files(
         parent_folder_path)
-    if not source_files:
+    if not source_files_list:
         print("No files to sort.")
     for child_folder, files_moved in report_dict.items():
         if files_moved > 0:
