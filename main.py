@@ -21,6 +21,10 @@ def main():
     for file in renamed_files_list:
         print(
             f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+    renamed_files_list = unsort_files(parent_folder_path)
+    for file in renamed_files_list:
+        print(
+            f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
 
 
 if __name__ == "__main__":
