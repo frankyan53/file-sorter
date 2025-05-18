@@ -3,17 +3,15 @@ from pathlib import Path
 
 
 def create_child_folders(parent_folder_path):
-    child_folder_list = ["3D Models", "Archives", "Audio", "Code", "Documents",
-                         "Executables", "Fonts", "Images", "Other", "Spreadsheets", "Videos"]
-    for folder in child_folder_list:
-        try:
+    child_folders_list = ["3D Models", "Archives", "Audio", "Code", "Documents",
+                          "Executables", "Fonts", "Images", "Other", "Spreadsheets", "Videos"]
+    try:
+        for folder in child_folders_list:
             child_folder_path = parent_folder_path / folder
             child_folder_path.mkdir(exist_ok=True)
-        except Exception as error:
-            print(f"An error occurred: {error}")
-            break
-    else:
-        print("Folders created successfully.")
+        return True
+    except Exception:
+        return False
 
 
 def move_files(parent_folder_path):
@@ -34,13 +32,9 @@ def move_files(parent_folder_path):
         if source_file_path.is_dir():
             continue
         for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
-            try:
-                if source_file_path.suffix in child_folder_extensions:
-                    shutil.move(source_file_path, source_file_path.parent /
-                                child_folder / source_file_path.name)
-                    break
-            except Exception as error:
-                print(f"An error occurred: {error}")
+            if source_file_path.suffix in child_folder_extensions:
+                shutil.move(source_file_path, source_file_path.parent /
+                            child_folder / source_file_path.name)
                 break
         else:
             shutil.move(source_file_path, source_file_path.parent /
