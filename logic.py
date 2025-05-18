@@ -3,13 +3,14 @@ import shutil
 from pathlib import Path
 
 
-def get_unique_path(destination_file_path):
+def get_unique_path(original_destination_file_path):
     counter = 1
-    while destination_file_path.exists():
-        destination_file_path = destination_file_path.with_stem(
-            f"{destination_file_path.stem}_{counter}")
+    renamed_destination_file_path = original_destination_file_path
+    while renamed_destination_file_path.exists():
+        renamed_destination_file_path = original_destination_file_path.with_stem(
+            f"{original_destination_file_path.stem}_{counter}")
         counter += 1
-    return destination_file_path
+    return renamed_destination_file_path
 
 
 def create_child_folders(parent_folder_path):
