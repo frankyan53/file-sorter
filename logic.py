@@ -34,11 +34,14 @@ def move_files(parent_folder_path):
             continue
         for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
             if source_file_path.suffix in child_folder_extensions:
+                destination_file_path = (
+                    source_file_path.parent / child_folder / source_file_path.name)
                 destination_file_path = get_unique_path(destination_file_path)
+                shutil.move(source_file_path, destination_file_path)
                 report[child_folder] += 1
                 break
         else:
-            shutil.move(source_file_path, source_file_path.parent /
-                        "Other" / source_file_path.name)
+            destination_file_path = source_file_path.parent / "Other" / source_file_path.name
+            shutil.move(source_file_path, destination_file_path)
             report["Other"] += 1
     return report
