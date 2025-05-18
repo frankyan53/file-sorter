@@ -32,11 +32,11 @@ def move_files(parent_folder_path):
     report_dict = {
         child_folder: 0 for child_folder in child_folder_extensions_dict}
     source_files_list = []
-    errors = []
+    move_files_errors = []
     try:
         parent_files_gen = parent_folder_path.iterdir()
     except Exception as error:
-        errors.append({"directory": str(parent_folder_path),
+        move_files_errors.append({"directory": str(parent_folder_path),
                       "operation": "iterating through folder", "error": str(error)})
         return source_files_list, report_dict, renamed_files_list, errors
     for source_file_path in parent_files_gen:
@@ -57,7 +57,7 @@ def move_files(parent_folder_path):
             renamed_destination_file_path = get_unique_path(
                 original_destination_file_path)
         except Exception as error:
-            errors.append({"directory": str(original_destination_file_path),
+            move_files_errors.append({"directory": str(original_destination_file_path),
                           "operation": "renaming file", "error": str(error)})
             continue
         try:
@@ -67,11 +67,11 @@ def move_files(parent_folder_path):
                     {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
             report_dict[child_folder_name] += 1
         except Exception as error:
-            errors.append({"source directory": str(source_file_path), "destination directory":
+            move_files_errors.append({"source directory": str(source_file_path), "destination directory":
                           str(renamed_destination_file_path), "operation": "moving file", "error": str(error)})
-    with open("errors.json", "w") as file:
-        json.dump(errors, file, indent=4)
-    return source_files_list, report_dict, renamed_files_list, errors
+    with open("move_files_errors.json", "w") as file:
+        json.dump(move_files_errors, file, indent=4)
+    return source_files_list, report_dict, renamed_files_list, move_files_errors
 
 
 def unsort_files(parent_folder_path):

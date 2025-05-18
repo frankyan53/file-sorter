@@ -9,7 +9,7 @@ def main():
     else:
         print("Encountered error when creating folders. Exiting.")
         return
-    source_files_list, report_dict, renamed_files_list, errors_list = move_files(
+    source_files_list, report_dict, renamed_files_list, move_files_errors_list = move_files(
         parent_folder_path)
     if not source_files_list:
         print("No files to sort.")
@@ -21,9 +21,9 @@ def main():
     for file in renamed_files_list:
         print(
             f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
-    if errors_list:
+    if move_files_errors_list:
         print(
-            f"Encountered {len(errors_list)} error{"s" if len(errors_list) != 1 else ""} moving files. See \"errors.json\" for more details.")
+            f"Encountered {len(move_files_errors_list)} error{"s" if len(move_files_errors_list) != 1 else ""} moving files. See \"errors.json\" for more details.")
     renamed_files_list = unsort_files(parent_folder_path)
     for file in renamed_files_list:
         print(
