@@ -9,8 +9,8 @@ def main():
     else:
         print("Encountered error when creating folders. Exiting.")
         return
-    report = move_files(parent_folder_path)[0]
-    for child_folder, files_moved in report.items():
+    report_dict = move_files(parent_folder_path)[0]
+    for child_folder, files_moved in report_dict.items():
         if files_moved > 0:
             print(f"{"Sort Report":=^40}")
             print(
