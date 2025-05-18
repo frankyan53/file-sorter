@@ -54,4 +54,4 @@ def move_files(parent_folder_path):
             renamed_files_list.append(
                 {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
         report_dict[child_folder_name] += 1
-    return report_dict, renamed_files_list, source_files
+    return source_files, report_dict, renamed_files_list
