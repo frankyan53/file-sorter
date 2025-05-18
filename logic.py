@@ -58,7 +58,7 @@ def move_files(parent_folder_path):
                 original_destination_file_path)
         except Exception as error:
             errors.append({"directory": str(original_destination_file_path),
-                          "operation": "renaming", "error": str(error)})
+                          "operation": "renaming file", "error": str(error)})
             continue
         try:
             shutil.move(source_file_path, renamed_destination_file_path)
@@ -68,7 +68,7 @@ def move_files(parent_folder_path):
             report_dict[child_folder_name] += 1
         except Exception as error:
             errors.append({"source directory": str(source_file_path), "destination directory":
-                          renamed_destination_file_path, "operation": "moving", "error": str(error)})
+                          str(renamed_destination_file_path), "operation": "moving file", "error": str(error)})
     with open("errors.json", "w") as file:
         json.dump(errors, file)
     return source_files_list, report_dict, renamed_files_list, errors
