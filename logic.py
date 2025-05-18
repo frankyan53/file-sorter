@@ -32,7 +32,10 @@ def move_files(parent_folder_path):
     report_dict = {
         child_folder: 0 for child_folder in child_folder_extensions_dict}
     for source_file_path in parent_folder_path.iterdir():
+        source_files = []
+        source_files.append(source_file_path)
         if source_file_path.is_dir():
+            source_files.remove(source_file_path)
             continue
         for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
             if source_file_path.suffix in child_folder_extensions:
@@ -51,4 +54,4 @@ def move_files(parent_folder_path):
             renamed_files_list.append(
                 {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
         report_dict[child_folder_name] += 1
-    return report_dict, renamed_files_list
+    return report_dict, renamed_files_list, source_files
