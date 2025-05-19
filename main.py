@@ -6,6 +6,7 @@ def main():
     parent_folder_path = get_parent_folder_path()
     print_sort_errors(parent_folder_path)
     print_create_errors(parent_folder_path)
+    print_sort_errors(parent_folder_path)
     print_no_files(parent_folder_path)
     print_renamed_sort_files(parent_folder_path)
     print_unsort_errors(parent_folder_path)
