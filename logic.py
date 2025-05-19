@@ -15,6 +15,7 @@ def create_folders(parent_folder_path):
         except Exception as error:
             append_error_dict(create_errors,
                               parent_folder_path, "creating folders", error)
+    write_json("create_errors.json", create_errors)
     return is_successful, create_errors
 
 
