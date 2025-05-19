@@ -38,7 +38,7 @@ def move_files(parent_folder_path):
     except Exception as error:
         move_files_errors.append({"directory": str(parent_folder_path),
                                   "operation": "iterating through folder", "error": str(error)})
-        return source_files_list, report_dict, renamed_files_list, errors
+        return source_files_list, report_dict, renamed_files_list, move_files_errors
     for source_file_path in parent_files_gen:
         if source_file_path.is_dir():
             continue
