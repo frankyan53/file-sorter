@@ -29,4 +29,4 @@ def append_rename_dict(renamed_files_list, original_file_path, renamed_file_path
 
 def append_error_dict(errors_list, directory, operation, error):
     errors_list.append({"directory": str(directory),
-                       "operation": operation, error: str(error)})
+                       "operation": operation, "error": str(error)})
