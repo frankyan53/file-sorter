@@ -3,146 +3,151 @@ import shutil
 from pathlib import Path
 
 
-def get_unique_path(original_destination_file_path):
+def load_json(file_path):
+    with open(file_path) as file:
+        return json.load(file)
+
+
+def write_json(file_path, data):
+    with open(file_path, "w") as file:
+        json.dump(data, file, indent=4)
+
+
+def get_unique_path(original_file_path):
     counter = 1
-    renamed_destination_file_path = original_destination_file_path
-    while renamed_destination_file_path.exists():
-        renamed_destination_file_path = original_destination_file_path.with_stem(
-            f"{original_destination_file_path.stem}_{counter}")
+    renamed_file_path = original_file_path
+    while renamed_file_path.exists():
+        renamed_file_path = original_file_path.with_stem(
+            f"{original_file_path.stem}_{counter}")
         counter += 1
-    return renamed_destination_file_path
+    return renamed_file_path
 
 
-def create_child_folders(parent_folder_path):
-    with open("child_folders.json") as file:
-        child_folders_list = json.load(file)
-    try:
-        for folder in child_folders_list:
-            child_folder_path = parent_folder_path / folder
-            child_folder_path.mkdir(exist_ok=True)
-        return True
-    except Exception:
-        return False
+def append_rename_dict(renamed_files_list, original_file_path, renamed_file_path):
+    if original_file_path != renamed_file_path:
+        renamed_files_list.append(
+            {"original": original_file_path.name, "renamed": renamed_file_path.name})
 
 
-def move_files(parent_folder_path):
-    renamed_files_list = []
-    with open("child_folder_extensions.json") as file:
-        child_folder_extensions_dict = json.load(file)
-    report_dict = {
-        child_folder: 0 for child_folder in child_folder_extensions_dict}
-    source_files_list = []
+def append_error_dict(errors_list, directory, operation, error):
+    errors_list.append({"directory": str(directory),
+                       "operation": operation, error: str(error)})
+
+
+def create_folders(parent_folder_path):
     is_successful = False
-    move_files_errors = []
+    create_folders_errors = []
+    child_folders = load_json("child_folders.json")
+    for folder in child_folders:
+        child_folder_path = parent_folder_path / folder
+        try:
+            child_folder_path.mkdir(exist_ok=True)
+            is_successful = True
+        except Exception as error:
+            append_error_dict(create_folders_errors,
+                              parent_folder_path, "creating folders", error)
+    return is_successful, create_folders_errors
+
+
+def sort_files(parent_folder_path):
+    has_source_files = False
+    folder_extensions = load_json("folder_extensions.json")
+    report = {
+        child_folder: 0 for child_folder in folder_extensions}
+    renamed_files = []
+    is_successful = False
+    sort_errors = []
     try:
-        parent_files_gen = parent_folder_path.iterdir()
+        parent_files = parent_folder_path.iterdir()
     except Exception as error:
-        move_files_errors.append({"directory": str(parent_folder_path),
-                                  "operation": "iterating through folder", "error": str(error)})
-        return source_files_list, report_dict, renamed_files_list, is_successful, move_files_errors
-    for source_file_path in parent_files_gen:
+        append_error_dict(sort_errors, parent_folder_path,
+                          "iterating through folder", error)
+        return has_source_files, report, renamed_files, is_successful, sort_errors
+    for source_file_path in parent_files:
         if source_file_path.is_dir():
             continue
-        source_files_list.append(source_file_path)
-        for child_folder, child_folder_extensions in child_folder_extensions_dict.items():
-            if source_file_path.suffix in child_folder_extensions:
-                child_folder_name = child_folder
-                original_destination_file_path = (
-                    source_file_path.parent / child_folder_name / source_file_path.name)
+        has_source_files = True
+        for folder, extensions in folder_extensions.items():
+            if source_file_path.suffix in extensions:
+                child_folder = folder
+                destination_file_path = (
+                    source_file_path.parent / child_folder / source_file_path.name)
                 break
         else:
-            child_folder_name = "Other"
-            original_destination_file_path = (
-                source_file_path.parent / child_folder_name / source_file_path.name)
-        try:
-            renamed_destination_file_path = get_unique_path(
-                original_destination_file_path)
-        except Exception as error:
-            move_files_errors.append({"directory": str(
-                original_destination_file_path), "operation": "renaming file", "error": str(error)})
-            continue
+            child_folder = "Other"
+            destination_file_path = (
+                source_file_path.parent / child_folder / source_file_path.name)
+        renamed_destination_file_path = get_unique_path(destination_file_path)
         try:
             shutil.move(source_file_path, renamed_destination_file_path)
             is_successful = True
-            if original_destination_file_path != renamed_destination_file_path:
-                renamed_files_list.append(
-                    {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
-            report_dict[child_folder_name] += 1
+            append_rename_dict(
+                renamed_files, destination_file_path, renamed_destination_file_path)
+            report[child_folder] += 1
         except Exception as error:
-            move_files_errors.append({"source_directory": str(source_file_path), "destination_directory":
-                                      str(renamed_destination_file_path), "operation": "moving file", "error": str(error)})
-    with open("move_files_errors.json", "w") as file:
-        json.dump(move_files_errors, file, indent=4)
-    return source_files_list, report_dict, renamed_files_list, is_successful, move_files_errors
+            append_error_dict(sort_errors,
+                              source_file_path, "moving file", error)
+    write_json("sort_errors.json", sort_errors)
+    return has_source_files, report, renamed_files, is_successful, sort_errors
 
 
 def unsort_files(parent_folder_path):
-    renamed_files_list = []
+    renamed_files = []
     is_successful = False
-    unsort_files_errors = []
-    with open("child_folders.json") as file:
-        child_folders_list = json.load(file)
-    for folder in child_folders_list:
+    unsort_errors = []
+    child_folders = load_json("child_folders.json")
+    for folder in child_folders:
         child_folder_path = parent_folder_path / folder
         if child_folder_path.exists():
             try:
-                child_files_gen = child_folder_path.iterdir()
+                destination_files = child_folder_path.iterdir()
             except Exception as error:
-                unsort_files_errors.append({"directory": str(
-                    parent_folder_path), "operation": "iterating through folder", "error": str(error)})
+                append_error_dict(
+                    unsort_errors, parent_folder_path, "iterating through folder", error)
                 continue
-            for destination_file_path in child_files_gen:
+            for destination_file_path in destination_files:
                 original_source_file_path = parent_folder_path / destination_file_path.name
-                try:
-                    renamed_source_file_path = get_unique_path(
-                        original_source_file_path)
-                except Exception as error:
-                    unsort_files_errors.append(
-                        {"directory": str(original_source_file_path), "operation": "renaming file", "error": str(error)})
-                    continue
+                renamed_source_file_path = get_unique_path(
+                    original_source_file_path)
                 try:
                     shutil.move(destination_file_path,
                                 renamed_source_file_path)
                     is_successful = True
                 except Exception as error:
-                    unsort_files_errors.append({"source_directory": str(destination_file_path), "destination_directory": str(
-                        renamed_source_file_path), "operation": "moving file", "error": str(error)})
+                    append_error_dict(
+                        unsort_errors, destination_file_path, "moving file", error)
                     continue
-                if original_source_file_path != renamed_source_file_path:
-                    renamed_files_list.append(
-                        {"original": original_source_file_path.name, "renamed": renamed_source_file_path.name})
+                append_rename_dict(
+                    renamed_files, original_source_file_path, renamed_source_file_path)
             try:
                 child_folder_path.rmdir()
             except Exception as error:
-                unsort_files_errors.append({"directory": str(
-                    child_folder_path), "operation": "deleting folder", "error": str(error)})
+                append_error_dict(unsort_errors,
+                                  child_folder_path, "deleting folder", error)
         else:
             continue
-    with open("unsort_files_errors.json", "w") as file:
-        json.dump(unsort_files_errors, file, indent=4)
-    return renamed_files_list, is_successful, unsort_files_errors
+    write_json("unsort_errors.json", unsort_errors)
+    return renamed_files, is_successful, unsort_errors
 
 
 def delete_empty_folders(parent_folder_path):
-    with open("child_folders.json") as file:
-        child_folders_list = json.load(file)
     is_successful = False
-    delete_empty_folders_errors = []
-    for folder in child_folders_list:
+    delete_errors = []
+    child_folders = load_json("child_folders.json")
+    for folder in child_folders:
         child_folder_path = parent_folder_path / folder
         try:
-            child_files_gen = child_folder_path.iterdir()
+            destination_files = child_folder_path.iterdir()
         except Exception as error:
-            delete_empty_folders_errors.append({"directory": str(
-                child_folder_path), "operation": "iterating through folder", "error": str(error)})
+            append_error_dict(
+                delete_errors, child_folder_path, "iterating through folder", error)
             continue
-        if not list(child_files_gen):
+        if not list(destination_files):
             try:
                 child_folder_path.rmdir()
                 is_successful = True
             except Exception as error:
-                delete_empty_folders_errors.append({"directory": str(
-                    child_folder_path), "operation": "deleting folder", "error": str(error)})
-    with open("delete_empty_folders_errors.json", "w") as file:
-        json.dump(delete_empty_folders_errors, file)
-    return is_successful, delete_empty_folders_errors
+                append_error_dict(delete_errors,
+                                  child_folder_path, "deleting folder", error)
+    write_json("delete_errors.json", delete_errors)
+    return is_successful, delete_errors
