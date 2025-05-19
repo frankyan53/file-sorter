@@ -5,7 +5,7 @@ from utils import load_json, write_json, append_rename_dict, append_error_dict, 
 
 def create_folders(parent_folder_path):
     is_successful = False
-    create_folders_errors = []
+    create_errors = []
     child_folders = load_json("child_folders.json")
     for folder in child_folders:
         child_folder_path = parent_folder_path / folder
@@ -13,9 +13,9 @@ def create_folders(parent_folder_path):
             child_folder_path.mkdir(exist_ok=True)
             is_successful = True
         except Exception as error:
-            append_error_dict(create_folders_errors,
+            append_error_dict(create_errors,
                               parent_folder_path, "creating folders", error)
-    return is_successful, create_folders_errors
+    return is_successful, create_errors
 
 
 def sort_files(parent_folder_path):
