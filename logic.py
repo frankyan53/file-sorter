@@ -32,13 +32,14 @@ def move_files(parent_folder_path):
     report_dict = {
         child_folder: 0 for child_folder in child_folder_extensions_dict}
     source_files_list = []
+    is_successful = False
     move_files_errors = []
     try:
         parent_files_gen = parent_folder_path.iterdir()
     except Exception as error:
         move_files_errors.append({"directory": str(parent_folder_path),
                                   "operation": "iterating through folder", "error": str(error)})
-        return source_files_list, report_dict, renamed_files_list, move_files_errors
+        return source_files_list, report_dict, renamed_files_list, is_successful, move_files_errors
     for source_file_path in parent_files_gen:
         if source_file_path.is_dir():
             continue
@@ -62,6 +63,7 @@ def move_files(parent_folder_path):
             continue
         try:
             shutil.move(source_file_path, renamed_destination_file_path)
+            is_successful = True
             if original_destination_file_path != renamed_destination_file_path:
                 renamed_files_list.append(
                     {"original": original_destination_file_path.name, "renamed": renamed_destination_file_path.name})
@@ -71,11 +73,12 @@ def move_files(parent_folder_path):
                                       str(renamed_destination_file_path), "operation": "moving file", "error": str(error)})
     with open("move_files_errors.json", "w") as file:
         json.dump(move_files_errors, file, indent=4)
-    return source_files_list, report_dict, renamed_files_list, move_files_errors
+    return source_files_list, report_dict, renamed_files_list, is_successful, move_files_errors
 
 
 def unsort_files(parent_folder_path):
     renamed_files_list = []
+    is_successful = False
     unsort_files_errors = []
     with open("child_folders.json") as file:
         child_folders_list = json.load(file)
@@ -100,6 +103,7 @@ def unsort_files(parent_folder_path):
                 try:
                     shutil.move(destination_file_path,
                                 renamed_source_file_path)
+                    is_successful = True
                 except Exception as error:
                     unsort_files_errors.append({"source_directory": str(destination_file_path), "destination_directory": str(
                         renamed_source_file_path), "operation": "moving file", "error": str(error)})
@@ -116,12 +120,13 @@ def unsort_files(parent_folder_path):
             continue
     with open("unsort_files_errors.json", "w") as file:
         json.dump(unsort_files_errors, file, indent=4)
-    return renamed_files_list, unsort_files_errors
+    return renamed_files_list, is_successful, unsort_files_errors
 
 
 def delete_empty_folders(parent_folder_path):
     with open("child_folders.json") as file:
         child_folders_list = json.load(file)
+    is_successful = False
     delete_empty_folders_errors = []
     for folder in child_folders_list:
         child_folder_path = parent_folder_path / folder
@@ -134,9 +139,10 @@ def delete_empty_folders(parent_folder_path):
         if not list(child_files_gen):
             try:
                 child_folder_path.rmdir()
+                is_successful = True
             except Exception as error:
                 delete_empty_folders_errors.append({"directory": str(
                     child_folder_path), "operation": "deleting folder", "error": str(error)})
     with open("delete_empty_folders_errors.json", "w") as file:
         json.dump(delete_empty_folders_errors, file)
-    return delete_empty_folders_errors
+    return is_successful, delete_empty_folders_errors
