@@ -1,9 +1,11 @@
 from cli import get_parent_folder_path
 from logic import create_folders, sort_files, unsort_files, delete_empty_folders
 from output import print_create_errors, print_sort_errors, print_no_files, print_renamed_sort_files, print_unsort_errors, print_renamed_unsort_files, print_delete_errors
+from utils import initialize_all_json
 
 
 def main():
+    initialize_all_json()
     parent_folder_path = get_parent_folder_path()
     is_successful, create_errors = create_folders(parent_folder_path)
     print_create_errors(is_successful, create_errors)
