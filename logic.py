@@ -87,7 +87,7 @@ def unsort_files(parent_folder_path):
             except Exception as error:
                 unsort_files_errors.append({"directory": str(
                     parent_folder_path), "operation": "iterating through folder", "error": str(error)})
-                return renamed_files_list, unsort_files_errors
+                continue
             for destination_file_path in child_files_gen:
                 original_source_file_path = parent_folder_path / destination_file_path.name
                 try:
