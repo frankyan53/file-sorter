@@ -1,5 +1,5 @@
 from cli import get_parent_folder_path
-from logic import create_child_folders, move_files, unsort_files
+from logic import create_child_folders, move_files, unsort_files, delete_empty_folders
 
 
 def main():
@@ -24,12 +24,17 @@ def main():
     if move_files_errors_list:
         print(
             f"Encountered {len(move_files_errors_list)} error{"s" if len(move_files_errors_list) != 1 else ""} moving files. See \"move_files_errors.json\" for more details.")
-    renamed_files_list, unsort_files_errors_list = unsort_files(parent_folder_path)
+    renamed_files_list, unsort_files_errors_list = unsort_files(
+        parent_folder_path)
     for file in renamed_files_list:
         print(
             f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
     if unsort_files_errors_list:
         print(f"Encountered {len(unsort_files_errors_list)} error{"s" if len(unsort_files_errors_list) != 1 else ""} unsorting files. See \"unsort_files_errors.json\" for more details.")
+    delete_empty_folders_errors_list = delete_empty_folders(parent_folder_path)
+    if delete_empty_folders_errors_list:
+        print(f"Encountered {len(delete_empty_folders_errors_list)} error{"s" if len(delete_empty_folders_errors_list) != 1 else ""} deleting folders. See \"delete_empty_folders_errors.json\" for more details.")
+
 
 if __name__ == "__main__":
     main()

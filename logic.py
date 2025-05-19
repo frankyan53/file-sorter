@@ -117,3 +117,26 @@ def unsort_files(parent_folder_path):
     with open("unsort_files_errors.json", "w") as file:
         json.dump(unsort_files_errors, file, indent=4)
     return renamed_files_list, unsort_files_errors
+
+
+def delete_empty_folders(parent_folder_path):
+    with open("child_folders.json") as file:
+        child_folders_list = json.load(file)
+    delete_empty_folders_errors = []
+    for folder in child_folders_list:
+        child_folder_path = parent_folder_path / folder
+        try:
+            child_files_gen = child_folder_path.iterdir()
+        except Exception as error:
+            delete_empty_folders_errors.append({"directory": str(
+                child_folder_path), "operation": "iterating through folder", "error": str(error)})
+            continue
+        if not list(child_files_gen):
+            try:
+                child_folder_path.rmdir()
+            except Exception as error:
+                delete_empty_folders_errors.append({"directory": str(
+                    child_folder_path), "operation": "deleting folder", "error": str(error)})
+    with open("delete_empty_folders_errors.json", "w") as file:
+        json.dump(delete_empty_folders_errors, file)
+    return delete_empty_folders_errors
