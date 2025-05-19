@@ -1,5 +1,4 @@
 from logic import create_folders, sort_files, unsort_files, delete_empty_folders
-from main import main
 
 
 def print_create_errors(parent_folder_path):
