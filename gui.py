@@ -32,7 +32,7 @@ def create_main_frame(app):
     return frame
 
 
-def create_all_main_frames(app):
+def create_main_frames(app):
     dashboard_frame = create_main_frame(app)
     defaults_frame = create_main_frame(app)
     settings_frame = create_main_frame(app)
@@ -58,7 +58,7 @@ def create_sidebar_button(sidebar, text):
     return button
 
 
-def create_all_sidebar_buttons(sidebar, dashboard_frame, defaults_frame, settings_frame):
+def create_sidebar_buttons(sidebar, dashboard_frame, defaults_frame, settings_frame):
     dashboard_button = create_sidebar_button(sidebar, "Dashboard")
     defaults_button = create_sidebar_button(sidebar, "Defaults")
     settings_button = create_sidebar_button(sidebar, "Settings")
@@ -116,9 +116,9 @@ def launch_gui():
     app = create_app()
     sidebar = create_sidebar_frame(app)
     create_sidebar_logo(sidebar)
-    dashboard_frame, defaults_frame, settings_frame = create_all_main_frames(
+    dashboard_frame, defaults_frame, settings_frame = create_main_frames(
         app)
-    dashboard_button, defaults_button, settings_button, sidebar_buttons = create_all_sidebar_buttons(
+    dashboard_button, defaults_button, settings_button, sidebar_buttons = create_sidebar_buttons(
         sidebar, dashboard_frame, defaults_frame, settings_frame)
     button_handler(dashboard_frame, dashboard_button, sidebar_buttons)
     parent_path_frame = create_get_parent_folder_frame(dashboard_frame)
