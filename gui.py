@@ -91,6 +91,5 @@ def launch_gui():
         app)
     dashboard_button, defaults_button, settings_button, sidebar_buttons = create_all_sidebar_buttons(
         sidebar, dashboard_frame, defaults_frame, settings_frame)
-    active_sidebar_button = None
     button_handler(dashboard_frame, dashboard_button, sidebar_buttons)
     app.mainloop()
