@@ -115,7 +115,7 @@ def parent_path_button_handler(parent_path_entry):
 def launch_gui():
     app = create_app()
     sidebar = create_sidebar_frame(app)
-    logo = create_sidebar_logo(sidebar)
+    create_sidebar_logo(sidebar)
     dashboard_frame, defaults_frame, settings_frame = create_all_main_frames(
         app)
     dashboard_button, defaults_button, settings_button, sidebar_buttons = create_all_sidebar_buttons(
