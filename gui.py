@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
-
+from tkinter import filedialog
 
 active_sidebar_button = None
 
@@ -96,6 +96,20 @@ def get_parent_folder_path(parent_path_frame):
         "Roboto", 12), placeholder_text="Enter folder path...", placeholder_text_color="gray", border_color="#2c8850", border_width=2)
     parent_path_entry.pack(side="left", padx=10, pady=5)
     parent_path_entry.propagate(False)
+    parent_path_button = ctk.CTkButton(parent_path_frame, text="Browse", width=50, height=30, corner_radius=10,
+                                       fg_color="#2c8850", font=("Roboto", 14), command=lambda: parent_path_button_handler(parent_path_entry))
+    parent_path_button.pack(side="right", padx=(0, 10), pady=5)
+    return parent_path_entry
+
+
+def parent_path_button_handler(parent_path_entry):
+    parent_file_path = filedialog.askdirectory()
+    if parent_file_path:
+        parent_path_entry.configure(state="normal")
+        parent_path_entry.delete(0, "end")
+        parent_path_entry.insert(0, parent_file_path)
+        parent_path_entry.configure(state="disabled")
+    return parent_path_entry.get()
 
 
 def launch_gui():
@@ -107,4 +121,6 @@ def launch_gui():
     dashboard_button, defaults_button, settings_button, sidebar_buttons = create_all_sidebar_buttons(
         sidebar, dashboard_frame, defaults_frame, settings_frame)
     button_handler(dashboard_frame, dashboard_button, sidebar_buttons)
+    parent_path_frame = create_get_parent_folder_frame(dashboard_frame)
+    get_parent_folder_path(parent_path_frame)
     app.mainloop()
