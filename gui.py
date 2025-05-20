@@ -86,7 +86,7 @@ def handle_sidebar_button(frame, button, sidebar_buttons):
 def create_get_parent_folder_frame(dashboard_frame):
     parent_path_frame = ctk.CTkFrame(
         dashboard_frame, width=550, height=60, corner_radius=5, fg_color="#f0ecec")
-    parent_path_frame.pack(pady=150)
+    parent_path_frame.place(x=25, y=150)
     parent_path_frame.pack_propagate(False)
     return parent_path_frame
 
