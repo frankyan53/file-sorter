@@ -109,7 +109,40 @@ def handle_parent_path_button(parent_path_entry):
         parent_path_entry.delete(0, "end")
         parent_path_entry.insert(0, parent_file_path)
         parent_path_entry.configure(state="disabled")
-    return parent_path_entry.get()
+
+
+def create_dashboard_button(frame):
+    button = ctk.CTkButton(frame, width=166.66, height=100, font=(
+        "Roboto", 14), corner_radius=5, fg_color="#2c8850", hover=True, hover_color="#3cae68")
+    return button
+
+
+def create_dashboard_buttons(dashboard_frame):
+    sort_button = create_dashboard_button(dashboard_frame)
+    sort_button.configure(
+        text="Sort Files", command=lambda: handle_sort_button())
+    sort_button.place(x=25, y=25)
+    unsort_button = create_dashboard_button(dashboard_frame)
+    unsort_button.configure(text="Unsort Files",
+                            command=lambda: handle_unsort_button())
+    unsort_button.place(x=216.66, y=25)
+    delete_folders_button = create_dashboard_button(dashboard_frame)
+    delete_folders_button.configure(
+        text="Delete Empty Files", command=lambda: handle_delete_folders_button())
+    delete_folders_button.place(x=408.32, y=25)
+    return sort_button, unsort_button, delete_folders_button
+
+
+def handle_sort_button():
+    pass
+
+
+def handle_unsort_button():
+    pass
+
+
+def handle_delete_folders_button():
+    pass
 
 
 def launch_gui():
@@ -122,5 +155,7 @@ def launch_gui():
         sidebar, dashboard_frame, defaults_frame, settings_frame)
     handle_sidebar_button(dashboard_frame, dashboard_button, sidebar_buttons)
     parent_path_frame = create_get_parent_folder_frame(dashboard_frame)
-    get_parent_folder_path(parent_path_frame)
+    parent_folder_path = get_parent_folder_path(parent_path_frame).get()
+    sort_button, unsort_button, delete_folders_button = create_dashboard_buttons(
+        dashboard_frame)
     app.mainloop()
