@@ -27,7 +27,7 @@ def create_sidebar_logo(sidebar):
 
 def create_main_frame(app):
     frame = ctk.CTkFrame(app, width=600, height=500, fg_color="white")
-    frame.pack(side="right")
+    frame.place(x=200, y=0)
     frame.pack_propagate(False)
     return frame
 
