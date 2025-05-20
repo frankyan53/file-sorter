@@ -83,6 +83,21 @@ def button_handler(frame, button, sidebar_buttons):
                 fg_color="transparent", text_color="white")
 
 
+def create_get_parent_folder_frame(dashboard_frame):
+    parent_path_frame = ctk.CTkFrame(
+        dashboard_frame, width=550, height=60, corner_radius=5, fg_color="#f0ecec")
+    parent_path_frame.pack(pady=150)
+    parent_path_frame.pack_propagate(False)
+    return parent_path_frame
+
+
+def get_parent_folder_path(parent_path_frame):
+    parent_path_entry = ctk.CTkEntry(parent_path_frame, width=400, height=30, corner_radius=5, fg_color="transparent", text_color="black", font=(
+        "Roboto", 12), placeholder_text="Enter folder path...", placeholder_text_color="gray", border_color="#2c8850", border_width=2)
+    parent_path_entry.pack(side="left", padx=10, pady=5)
+    parent_path_entry.propagate(False)
+
+
 def launch_gui():
     app = create_app()
     sidebar = create_sidebar_frame(app)
