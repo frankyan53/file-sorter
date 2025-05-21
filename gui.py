@@ -1,6 +1,9 @@
 import customtkinter as ctk
+from pathlib import Path
+from logic import create_folders, sort_files, unsort_files, delete_empty_folders
 from PIL import Image
 from tkinter import filedialog
+
 
 active_sidebar_button = None
 
@@ -117,32 +120,44 @@ def create_dashboard_button(frame):
     return button
 
 
-def create_dashboard_buttons(dashboard_frame):
+def create_dashboard_buttons(dashboard_frame, parent_path_entry):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
-        text="Sort Files", command=lambda: handle_sort_button())
+        text="Sort Files", command=lambda: handle_sort_button(parent_path_entry))
     sort_button.place(x=25, y=25)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
-                            command=lambda: handle_unsort_button())
+                            command=lambda: handle_unsort_button(parent_path_entry))
     unsort_button.place(x=216.66, y=25)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(
-        text="Delete Empty Files", command=lambda: handle_delete_folders_button())
+        text="Delete Empty Files", command=lambda: handle_delete_folders_button(parent_path_entry))
     delete_folders_button.place(x=408.32, y=25)
     return sort_button, unsort_button, delete_folders_button
 
 
-def handle_sort_button():
-    pass
+def get_parent_folder_path(parent_path_entry):
+    parent_folder_path = Path(parent_path_entry.get())
+    return parent_folder_path
 
 
-def handle_unsort_button():
-    pass
+def handle_sort_button(parent_path_entry):
+    parent_folder_path = get_parent_folder_path(parent_path_entry)
+    print(parent_folder_path)
+    is_successful, create_errors = create_folders(parent_folder_path)
+    has_source_files, report, renamed_files, is_successful, sort_errors = sort_files(
+        parent_folder_path)
 
 
-def handle_delete_folders_button():
-    pass
+def handle_unsort_button(parent_path_entry):
+    parent_folder_path = get_parent_folder_path(parent_path_entry)
+    renamed_files, is_successful, unsort_errors = unsort_files(
+        parent_folder_path)
+
+
+def handle_delete_folders_button(parent_path_entry):
+    parent_folder_path = get_parent_folder_path(parent_path_entry)
+    is_successful, delete_errors = delete_empty_folders(parent_folder_path)
 
 
 def launch_gui():
@@ -155,7 +170,7 @@ def launch_gui():
         sidebar, dashboard_frame, defaults_frame, settings_frame)
     handle_sidebar_button(dashboard_frame, dashboard_button, sidebar_buttons)
     parent_path_frame = create_get_parent_folder_frame(dashboard_frame)
-    parent_folder_path = get_parent_folder_path(parent_path_frame).get()
+    parent_path_entry = create_get_parent_folder_entry(parent_path_frame)
     sort_button, unsort_button, delete_folders_button = create_dashboard_buttons(
-        dashboard_frame)
+        dashboard_frame, parent_path_entry)
     app.mainloop()
