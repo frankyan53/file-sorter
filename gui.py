@@ -86,10 +86,23 @@ def handle_sidebar_button(frame, button, sidebar_buttons):
                 fg_color="transparent", text_color="white")
 
 
+def create_page_title(text, frame):
+    title = ctk.CTkLabel(frame, text=text, font=(
+        "Roboto Black", 24, "bold"), text_color="#2c8850")
+    title.place(x=25, y=25)
+    return title
+
+
+def create_page_titles(dashboard_frame, defaults_frame, settings_frame):
+    dashboard_title = create_page_title("Dashboard", dashboard_frame)
+    defaults_title = create_page_title("Defaults", defaults_frame)
+    settings_title = create_page_title("Settings", settings_frame)
+
+
 def create_get_parent_folder_frame(dashboard_frame):
     parent_path_frame = ctk.CTkFrame(
         dashboard_frame, width=550, height=60, corner_radius=5, fg_color="#f0ecec")
-    parent_path_frame.place(x=25, y=25)
+    parent_path_frame.place(x=25, y=75)
     parent_path_frame.pack_propagate(False)
     return parent_path_frame
 
@@ -124,15 +137,15 @@ def create_dashboard_buttons(dashboard_frame, parent_path_entry):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
         text="Sort Files", command=lambda: handle_sort_button(parent_path_entry))
-    sort_button.place(x=25, y=110)
+    sort_button.place(x=25, y=160)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
                             command=lambda: handle_unsort_button(parent_path_entry))
-    unsort_button.place(x=216.66, y=110)
+    unsort_button.place(x=216.66, y=160)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(
         text="Delete Empty Files", command=lambda: handle_delete_folders_button(parent_path_entry))
-    delete_folders_button.place(x=408.32, y=110)
+    delete_folders_button.place(x=408.32, y=160)
     return sort_button, unsort_button, delete_folders_button
 
 
@@ -166,6 +179,7 @@ def launch_gui():
     create_sidebar_logo(sidebar)
     dashboard_frame, defaults_frame, settings_frame = create_main_frames(
         app)
+    create_page_titles(dashboard_frame, defaults_frame, settings_frame)
     dashboard_button, defaults_button, settings_button, sidebar_buttons = create_sidebar_buttons(
         sidebar, dashboard_frame, defaults_frame, settings_frame)
     handle_sidebar_button(dashboard_frame, dashboard_button, sidebar_buttons)
