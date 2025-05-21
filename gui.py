@@ -101,7 +101,7 @@ def create_page_titles(dashboard_frame, defaults_frame, settings_frame):
 
 def create_get_parent_folder_frame(dashboard_frame):
     parent_path_frame = ctk.CTkFrame(
-        dashboard_frame, width=550, height=60, corner_radius=5, fg_color="#f0ecec")
+        dashboard_frame, width=550, height=70, corner_radius=5, fg_color="#f0ecec")
     parent_path_frame.place(x=25, y=75)
     parent_path_frame.pack_propagate(False)
     return parent_path_frame
@@ -111,21 +111,37 @@ def create_get_parent_folder_entry(parent_path_frame):
     parent_path_entry = ctk.CTkEntry(parent_path_frame, width=450, height=30, corner_radius=5, fg_color="transparent", text_color="black", font=(
         "Roboto", 14), placeholder_text="Select a folder to sort...", placeholder_text_color="gray", border_color="#2c8850", border_width=2)
     parent_path_entry.configure(state="disabled")
-    parent_path_entry.pack(side="left", padx=10, pady=5)
+    parent_path_entry.place(x=10, y=10)
     parent_path_entry.propagate(False)
     parent_path_button = ctk.CTkButton(parent_path_frame, text="Browse", width=50, height=30, corner_radius=10, fg_color="#2c8850", font=(
-        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: handle_parent_path_button(parent_path_entry))
-    parent_path_button.pack(side="right", padx=(0, 10), pady=5)
+        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: handle_parent_path_button(parent_path_entry, parent_path_frame))
+    parent_path_button.place(x=470, y=10)
+    create_parent_path_status_label(parent_path_frame, "❌ No folder selected.")
     return parent_path_entry
 
 
-def handle_parent_path_button(parent_path_entry):
-    parent_file_path = filedialog.askdirectory()
-    if parent_file_path:
+def create_parent_path_status_label(parent_path_frame, text):
+    status_label = ctk.CTkLabel(parent_path_frame, text=text, font=(
+        "Roboto", 14), text_color="black", fg_color="transparent")
+    status_label.place(x=15, y=42.5)
+
+
+def handle_parent_path_button(parent_path_entry, parent_path_frame):
+    old_parent_folder_path = parent_path_entry.get()
+    new_parent_folder_path = filedialog.askdirectory()
+    if not old_parent_folder_path and not new_parent_folder_path:
+        create_parent_path_status_label(
+            parent_path_frame, "❌ No folder selected.")
+    elif old_parent_folder_path and not new_parent_folder_path:
+        create_parent_path_status_label(
+            parent_path_frame, "✔️ Folder selected.      ")
+    else:
         parent_path_entry.configure(state="normal")
         parent_path_entry.delete(0, "end")
-        parent_path_entry.insert(0, parent_file_path)
+        parent_path_entry.insert(0, new_parent_folder_path)
         parent_path_entry.configure(state="disabled")
+        create_parent_path_status_label(
+            parent_path_frame, "✔️ Folder selected.      ")
 
 
 def create_dashboard_button(frame):
@@ -138,15 +154,15 @@ def create_dashboard_buttons(dashboard_frame, parent_path_entry):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
         text="Sort Files", command=lambda: handle_sort_button(parent_path_entry))
-    sort_button.place(x=25, y=160)
+    sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
                             command=lambda: handle_unsort_button(parent_path_entry))
-    unsort_button.place(x=216.66, y=160)
+    unsort_button.place(x=216.66, y=170)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(
         text="Delete Empty Files", command=lambda: handle_delete_folders_button(parent_path_entry))
-    delete_folders_button.place(x=408.32, y=160)
+    delete_folders_button.place(x=408.32, y=170)
     return sort_button, unsort_button, delete_folders_button
 
 
@@ -185,7 +201,8 @@ def launch_gui():
         sidebar, dashboard_frame, defaults_frame, settings_frame)
     handle_sidebar_button(dashboard_frame, dashboard_button, sidebar_buttons)
     parent_path_frame = create_get_parent_folder_frame(dashboard_frame)
-    parent_path_entry = create_get_parent_folder_entry(parent_path_frame)
+    parent_path_entry = create_get_parent_folder_entry(
+        parent_path_frame)
     sort_button, unsort_button, delete_folders_button = create_dashboard_buttons(
         dashboard_frame, parent_path_entry)
     app.mainloop()
