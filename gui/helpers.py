@@ -15,7 +15,7 @@ def handle_sidebar_button(frame, button, sidebar_buttons):
                 fg_color="transparent", text_color="white")
 
 
-def handle_parent_path_button(parent_path_entry, parent_path_frame, console):
+def handle_parent_path_button(parent_path_entry, parent_path_frame):
     old_parent_folder_path = parent_path_entry.get()
     new_parent_folder_path = filedialog.askdirectory()
     if not old_parent_folder_path and not new_parent_folder_path:
@@ -71,7 +71,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
     console.see("end")
 
 
-def handle_unsort_button(parent_path_entry, dashboard_frame, console):
+def handle_unsort_button(parent_path_entry, dashboard_frame):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     renamed_files, is_successful, unsort_errors = logic.unsort_files(
         parent_folder_path)
@@ -86,7 +86,7 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
             dashboard_frame, "✔️ Files unsorted.")
 
 
-def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
+def handle_delete_folders_button(parent_path_entry, dashboard_frame):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     is_successful, delete_errors = logic.delete_empty_folders(
         parent_folder_path)

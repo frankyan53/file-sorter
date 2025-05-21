@@ -91,14 +91,14 @@ def create_get_parent_folder_frame(dashboard_frame):
     return parent_path_frame
 
 
-def create_get_parent_folder_entry(parent_path_frame, console):
+def create_get_parent_folder_entry(parent_path_frame):
     parent_path_entry = ctk.CTkEntry(parent_path_frame, width=450, height=30, corner_radius=5, fg_color="transparent", text_color="black", font=(
         "Roboto", 14), placeholder_text="Select a folder to sort...", placeholder_text_color="gray", border_color="#2c8850", border_width=2)
     parent_path_entry.configure(state="disabled")
     parent_path_entry.place(x=10, y=10)
     parent_path_entry.propagate(False)
     parent_path_button = ctk.CTkButton(parent_path_frame, text="Browse", width=50, height=30, corner_radius=10, fg_color="#2c8850", font=(
-        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: helpers.handle_parent_path_button(parent_path_entry, parent_path_frame, console))
+        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: helpers.handle_parent_path_button(parent_path_entry, parent_path_frame))
     parent_path_button.place(x=470, y=10)
     create_parent_path_status_label(parent_path_frame, "❌ No folder selected.")
     return parent_path_entry
@@ -118,16 +118,16 @@ def create_dashboard_button(frame):
 
 def create_dashboard_buttons(dashboard_frame, parent_path_entry, console):
     sort_button = create_dashboard_button(dashboard_frame)
-    sort_button.configure(
-        text="Sort Files", command=lambda: helpers.handle_sort_button(parent_path_entry, dashboard_frame, console))
+    sort_button.configure(text="Sort Files", command=lambda: helpers.handle_sort_button(
+        parent_path_entry, dashboard_frame, console))
     sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files", command=lambda: helpers.handle_unsort_button(
-        parent_path_entry, dashboard_frame, console))
+        parent_path_entry, dashboard_frame))
     unsort_button.place(x=216.66, y=170)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(text="Delete Empty Files", command=lambda: helpers.handle_delete_folders_button(
-        parent_path_entry, dashboard_frame, console))
+        parent_path_entry, dashboard_frame))
     delete_folders_button.place(x=408.32, y=170)
     return sort_button, unsort_button, delete_folders_button
 
