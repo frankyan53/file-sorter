@@ -68,6 +68,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         console.insert(
             "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
     console.insert("end", "\n")
+    console.see("end")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
