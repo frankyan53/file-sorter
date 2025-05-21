@@ -56,18 +56,18 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "❌ Failed to sort files.")
         console.insert("end", "Failed to sort files.\n")
-    elif is_successful and sort_errors:
+    if is_successful and sort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "⚠️ Some files could not be sorted.")
         console.insert("end", "Some files could not be sorted.\n")
-    elif is_successful and not sort_errors:
+    if is_successful and not sort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files sorted.")
         console.insert("end", "Files sorted.\n")
-    else:
+    if not has_source_files:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "✔️ Files have already been sorted.")
-        console.insert("end", "Files have already been sorted.\n")
+            dashboard_frame, "ℹ️ Nothing to sort.")
+        console.insert("end", "Nothing to sort.\n")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
