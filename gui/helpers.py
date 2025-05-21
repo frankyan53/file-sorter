@@ -68,6 +68,13 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to sort.")
         console.insert("end", "Nothing to sort.\n")
+    else:
+        console.insert("end", "--- Sort Report ---\n")
+        for child_folder, files_moved in report.items():
+            if files_moved > 0:
+                console.insert(
+                    "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
+        console.insert("end", "\n")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
