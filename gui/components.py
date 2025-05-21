@@ -136,3 +136,12 @@ def create_dashboard_button_status_label(dashboard_frame, text):
     status_label = ctk.CTkLabel(dashboard_frame, text=text, font=(
         "Roboto", 14), text_color="black", fg_color="transparent")
     status_label.place(x=25, y=275)
+
+
+def create_dashboard_console(dashboard_frame):
+    console = ctk.CTkTextbox(dashboard_frame, width=550, height=180, corner_radius=5, font=(
+        "Courier New", 12), text_color="black", fg_color="#f0ecec", wrap="word")
+    console.place(x=25, y=295)
+    console.tag_config("placeholder", foreground="grey")
+    console.insert("end", "Console output will appear here...", "placeholder")
+    return console
