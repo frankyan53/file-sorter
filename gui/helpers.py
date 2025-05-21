@@ -18,17 +18,12 @@ def handle_sidebar_button(frame, button, sidebar_buttons):
 def handle_parent_path_button(parent_path_entry, parent_path_frame, console):
     old_parent_folder_path = parent_path_entry.get()
     new_parent_folder_path = filedialog.askdirectory()
-    if state.console_placeholder_text:
-        console.delete("1.0", "end")
-        state.console_placeholder_text = False
     if not old_parent_folder_path and not new_parent_folder_path:
         components.create_parent_path_status_label(
             parent_path_frame, "❌ No folder selected.")
-        console.insert("end", "No folder selected.\n")
     elif old_parent_folder_path and not new_parent_folder_path:
         components.create_parent_path_status_label(
             parent_path_frame, "⚠️ Selected folder unchanged.")
-        console.insert("end", "Selected folder unchanged.\n")
     else:
         parent_path_entry.configure(state="normal")
         parent_path_entry.delete(0, "end")
@@ -36,7 +31,6 @@ def handle_parent_path_button(parent_path_entry, parent_path_frame, console):
         parent_path_entry.configure(state="disabled")
         components.create_parent_path_status_label(
             parent_path_frame, "✔️ Folder selected.                        ")
-        console.insert("end", "Folder selected.\n")
 
 
 def get_parent_folder_path(parent_path_entry):
@@ -49,74 +43,58 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
     logic.create_folders(parent_folder_path)
     has_source_files, report, renamed_files, is_successful, sort_errors = logic.sort_files(
         parent_folder_path)
-    if state.console_placeholder_text:
-        console.delete("1.0", "end")
-        state.console_placeholder_text = False
     if not is_successful and sort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "❌ Failed to sort files.")
-        console.insert("end", "Failed to sort files.\n")
     if is_successful and sort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "⚠️ Some files could not be sorted.")
-        console.insert("end", "Some files could not be sorted.\n")
     if is_successful and not sort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files sorted.")
-        console.insert("end", "Files sorted.\n")
     if not has_source_files:
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to sort.")
-        console.insert("end", "Nothing to sort.\n")
     else:
+        if state.console_placeholder_text:
+            console.delete("1.0", "end")
+            state.console_placeholder_text = False
         console.insert("end", "--- Sort Report ---\n")
         for child_folder, files_moved in report.items():
             if files_moved > 0:
                 console.insert(
                     "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
-        console.insert("end", "\n")
     for file in renamed_files:
         console.insert(
             "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+    console.insert("end", "\n")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     renamed_files, is_successful, unsort_errors = logic.unsort_files(
         parent_folder_path)
-    if state.console_placeholder_text:
-        console.delete("1.0", "end")
-        state.console_placeholder_text = False
     if not is_successful and unsort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "❌ Failed to unsort files.")
-        console.insert("end", "Failed to unsort files.\n")
     elif is_successful and unsort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "⚠️ Some files could not be unsorted.")
-        console.insert("end", "Some files could not be unsorted.\n")
     else:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files unsorted.")
-        console.insert("end", "Files unsorted.\n")
 
 
 def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     is_successful, delete_errors = logic.delete_empty_folders(
         parent_folder_path)
-    if state.console_placeholder_text:
-        console.delete("1.0", "end")
-        state.console_placeholder_text = False
     if not is_successful and delete_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "❌ Failed to delete empty folders.")
-        console.insert("end", "Failed to delete empty folders.\n")
     elif is_successful and delete_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "⚠️ Some folders could not be deleted.")
-        console.insert("end", "Some folders could not be deleted.\n")
     else:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Folders deleted.")
-        console.insert("end", "Folders deleted.\n")
