@@ -38,11 +38,23 @@ def get_parent_folder_path(parent_path_entry):
     return parent_folder_path
 
 
-def handle_sort_button(parent_path_entry):
+def handle_sort_button(parent_path_entry, dashboard_frame):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     logic.create_folders(parent_folder_path)
     has_source_files, report, renamed_files, is_successful, sort_errors = logic.sort_files(
         parent_folder_path)
+    if not is_successful and sort_errors:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "❌ Failed to sort files.")
+    elif is_successful and sort_errors:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "⚠️ Some files could not be sorted.")
+    elif is_successful and not sort_errors:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "✔️ Files sorted successfully.")
+    else:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "✔️ Files have already been sorted.")
 
 
 def handle_unsort_button(parent_path_entry):
