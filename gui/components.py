@@ -119,7 +119,7 @@ def create_dashboard_button(frame):
 def create_dashboard_buttons(dashboard_frame, parent_path_entry):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
-        text="Sort Files", command=lambda: helpers.handle_sort_button(parent_path_entry))
+        text="Sort Files", command=lambda: helpers.handle_sort_button(parent_path_entry, dashboard_frame))
     sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
@@ -130,3 +130,9 @@ def create_dashboard_buttons(dashboard_frame, parent_path_entry):
         text="Delete Empty Files", command=lambda: helpers.handle_delete_folders_button(parent_path_entry))
     delete_folders_button.place(x=408.32, y=170)
     return sort_button, unsort_button, delete_folders_button
+
+
+def create_dashboard_button_status_label(dashboard_frame, text):
+    status_label = ctk.CTkLabel(dashboard_frame, text=text, font=(
+        "Roboto", 14), text_color="black", fg_color="transparent")
+    status_label.place(x=15, y=400)
