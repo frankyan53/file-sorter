@@ -1,11 +1,6 @@
 import customtkinter as ctk
-from pathlib import Path
-from logic import create_folders, sort_files, unsort_files, delete_empty_folders
+import gui.helpers as helpers
 from PIL import Image
-from tkinter import filedialog
-
-
-active_sidebar_button = None
 
 
 def create_app():
@@ -23,7 +18,7 @@ def create_sidebar_frame(app):
 
 def create_sidebar_logo(sidebar):
     logo_image = ctk.CTkImage(Image.open(
-        "file_sorter_logo.png"), size=(120, 120))
+        "assets/file_sorter_logo.png"), size=(120, 120))
     logo_label = ctk.CTkLabel(sidebar, text="", image=logo_image)
     logo_label.pack(pady=(30, 20))
 
@@ -66,24 +61,13 @@ def create_sidebar_buttons(sidebar, dashboard_frame, defaults_frame, settings_fr
     defaults_button = create_sidebar_button(sidebar, "Defaults")
     settings_button = create_sidebar_button(sidebar, "Settings")
     sidebar_buttons = (dashboard_button, defaults_button, settings_button)
-    dashboard_button.configure(command=lambda: handle_sidebar_button(
+    dashboard_button.configure(command=lambda: helpers.handle_sidebar_button(
         dashboard_frame, dashboard_button, sidebar_buttons))
-    defaults_button.configure(command=lambda: handle_sidebar_button(
+    defaults_button.configure(command=lambda: helpers.handle_sidebar_button(
         defaults_frame, defaults_button, sidebar_buttons))
-    settings_button.configure(command=lambda: handle_sidebar_button(
+    settings_button.configure(command=lambda: helpers.handle_sidebar_button(
         settings_frame, settings_button, sidebar_buttons))
     return dashboard_button, defaults_button, settings_button, sidebar_buttons
-
-
-def handle_sidebar_button(frame, button, sidebar_buttons):
-    global active_sidebar_button
-    active_sidebar_button = button
-    frame.lift()
-    button.configure(text_color="#2c8850", fg_color="white")
-    for sidebar_button in sidebar_buttons:
-        if button != sidebar_button:
-            sidebar_button.configure(
-                fg_color="transparent", text_color="white")
 
 
 def create_page_title(text, frame):
@@ -114,7 +98,7 @@ def create_get_parent_folder_entry(parent_path_frame):
     parent_path_entry.place(x=10, y=10)
     parent_path_entry.propagate(False)
     parent_path_button = ctk.CTkButton(parent_path_frame, text="Browse", width=50, height=30, corner_radius=10, fg_color="#2c8850", font=(
-        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: handle_parent_path_button(parent_path_entry, parent_path_frame))
+        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: helpers.handle_parent_path_button(parent_path_entry, parent_path_frame))
     parent_path_button.place(x=470, y=10)
     create_parent_path_status_label(parent_path_frame, "❌ No folder selected.")
     return parent_path_entry
@@ -126,24 +110,6 @@ def create_parent_path_status_label(parent_path_frame, text):
     status_label.place(x=15, y=42.5)
 
 
-def handle_parent_path_button(parent_path_entry, parent_path_frame):
-    old_parent_folder_path = parent_path_entry.get()
-    new_parent_folder_path = filedialog.askdirectory()
-    if not old_parent_folder_path and not new_parent_folder_path:
-        create_parent_path_status_label(
-            parent_path_frame, "❌ No folder selected.")
-    elif old_parent_folder_path and not new_parent_folder_path:
-        create_parent_path_status_label(
-            parent_path_frame, "✔️ Folder selected.      ")
-    else:
-        parent_path_entry.configure(state="normal")
-        parent_path_entry.delete(0, "end")
-        parent_path_entry.insert(0, new_parent_folder_path)
-        parent_path_entry.configure(state="disabled")
-        create_parent_path_status_label(
-            parent_path_frame, "✔️ Folder selected.      ")
-
-
 def create_dashboard_button(frame):
     button = ctk.CTkButton(frame, width=166.66, height=100, font=(
         "Roboto", 14), corner_radius=5, fg_color="#2c8850", hover=True, hover_color="#3cae68")
@@ -153,56 +119,14 @@ def create_dashboard_button(frame):
 def create_dashboard_buttons(dashboard_frame, parent_path_entry):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
-        text="Sort Files", command=lambda: handle_sort_button(parent_path_entry))
+        text="Sort Files", command=lambda: helpers.handle_sort_button(parent_path_entry))
     sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
-                            command=lambda: handle_unsort_button(parent_path_entry))
+                            command=lambda: helpers.handle_unsort_button(parent_path_entry))
     unsort_button.place(x=216.66, y=170)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(
-        text="Delete Empty Files", command=lambda: handle_delete_folders_button(parent_path_entry))
+        text="Delete Empty Files", command=lambda: helpers.handle_delete_folders_button(parent_path_entry))
     delete_folders_button.place(x=408.32, y=170)
     return sort_button, unsort_button, delete_folders_button
-
-
-def get_parent_folder_path(parent_path_entry):
-    parent_folder_path = Path(parent_path_entry.get())
-    return parent_folder_path
-
-
-def handle_sort_button(parent_path_entry):
-    parent_folder_path = get_parent_folder_path(parent_path_entry)
-    print(parent_folder_path)
-    is_successful, create_errors = create_folders(parent_folder_path)
-    has_source_files, report, renamed_files, is_successful, sort_errors = sort_files(
-        parent_folder_path)
-
-
-def handle_unsort_button(parent_path_entry):
-    parent_folder_path = get_parent_folder_path(parent_path_entry)
-    renamed_files, is_successful, unsort_errors = unsort_files(
-        parent_folder_path)
-
-
-def handle_delete_folders_button(parent_path_entry):
-    parent_folder_path = get_parent_folder_path(parent_path_entry)
-    is_successful, delete_errors = delete_empty_folders(parent_folder_path)
-
-
-def launch_gui():
-    app = create_app()
-    sidebar = create_sidebar_frame(app)
-    create_sidebar_logo(sidebar)
-    dashboard_frame, defaults_frame, settings_frame = create_main_frames(
-        app)
-    create_page_titles(dashboard_frame, defaults_frame, settings_frame)
-    dashboard_button, defaults_button, settings_button, sidebar_buttons = create_sidebar_buttons(
-        sidebar, dashboard_frame, defaults_frame, settings_frame)
-    handle_sidebar_button(dashboard_frame, dashboard_button, sidebar_buttons)
-    parent_path_frame = create_get_parent_folder_frame(dashboard_frame)
-    parent_path_entry = create_get_parent_folder_entry(
-        parent_path_frame)
-    sort_button, unsort_button, delete_folders_button = create_dashboard_buttons(
-        dashboard_frame, parent_path_entry)
-    app.mainloop()

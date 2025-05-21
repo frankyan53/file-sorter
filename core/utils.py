@@ -1,5 +1,5 @@
+import config.defaults as defaults
 import json
-from defaults import child_folders, folder_extensions
 from pathlib import Path
 
 
@@ -9,8 +9,8 @@ def initialize_json(file_path, data):
 
 
 def initialize_all_json():
-    initialize_json("child_folders.json", child_folders)
-    initialize_json("folder_extensions.json", folder_extensions)
+    initialize_json("child_folders.json", defaults.child_folders)
+    initialize_json("folder_extensions.json", defaults.folder_extensions)
     initialize_json("create_errors.json", None)
     initialize_json("sort_errors.json", None)
     initialize_json("unsort_errors.json", None)
