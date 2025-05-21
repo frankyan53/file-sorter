@@ -15,22 +15,28 @@ def handle_sidebar_button(frame, button, sidebar_buttons):
                 fg_color="transparent", text_color="white")
 
 
-def handle_parent_path_button(parent_path_entry, parent_path_frame):
+def handle_parent_path_button(parent_path_entry, parent_path_frame, console):
     old_parent_folder_path = parent_path_entry.get()
     new_parent_folder_path = filedialog.askdirectory()
+    if state.console_placeholder_text:
+        console.delete("1.0", "end")
+        state.console_placeholder_text = False
     if not old_parent_folder_path and not new_parent_folder_path:
         components.create_parent_path_status_label(
             parent_path_frame, "❌ No folder selected.")
+        console.insert("end", "No folder selected.\n")
     elif old_parent_folder_path and not new_parent_folder_path:
         components.create_parent_path_status_label(
-            parent_path_frame, "✔️ Folder selected.      ")
+            parent_path_frame, "⚠️ Selected folder unchanged.")
+        console.insert("end", "Selected folder unchanged.\n")
     else:
         parent_path_entry.configure(state="normal")
         parent_path_entry.delete(0, "end")
         parent_path_entry.insert(0, new_parent_folder_path)
         parent_path_entry.configure(state="disabled")
         components.create_parent_path_status_label(
-            parent_path_frame, "✔️ Folder selected.      ")
+            parent_path_frame, "✔️ Folder selected.                        ")
+        console.insert("end", "Folder selected.\n")
 
 
 def get_parent_folder_path(parent_path_entry):

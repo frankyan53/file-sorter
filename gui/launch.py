@@ -16,9 +16,9 @@ def launch():
         dashboard_frame, dashboard_button, sidebar_buttons)
     parent_path_frame = components.create_get_parent_folder_frame(
         dashboard_frame)
-    parent_path_entry = components.create_get_parent_folder_entry(
-        parent_path_frame)
     console = components.create_dashboard_console(dashboard_frame)
+    parent_path_entry = components.create_get_parent_folder_entry(
+        parent_path_frame, console)
     sort_button, unsort_button, delete_folders_button = components.create_dashboard_buttons(
         dashboard_frame, parent_path_entry, console)
     app.mainloop()
