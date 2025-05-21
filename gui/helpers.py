@@ -89,6 +89,24 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files unsorted.")
         console.insert("end", "Files unsorted.\n")
+
+
+def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     is_successful, delete_errors = logic.delete_empty_folders(
         parent_folder_path)
+    if state.console_placeholder_text:
+        console.delete("1.0", "end")
+        state.console_placeholder_text = False
+    if not is_successful and delete_errors:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "❌ Failed to delete empty folders.")
+        console.insert("end", "Failed to delete empty folders.\n")
+    elif is_successful and delete_errors:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "⚠️ Some folders could not be deleted.")
+        console.insert("end", "Some folders could not be deleted.\n")
+    else:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "✔️ Folders deleted.")
+        console.insert("end", "Folders deleted.\n")
