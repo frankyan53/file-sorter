@@ -135,4 +135,4 @@ def create_dashboard_buttons(dashboard_frame, parent_path_entry):
 def create_dashboard_button_status_label(dashboard_frame, text):
     status_label = ctk.CTkLabel(dashboard_frame, text=text, font=(
         "Roboto", 14), text_color="black", fg_color="transparent")
-    status_label.place(x=15, y=400)
+    status_label.place(x=25, y=275)
