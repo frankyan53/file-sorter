@@ -116,10 +116,10 @@ def create_dashboard_button(frame):
     return button
 
 
-def create_dashboard_buttons(dashboard_frame, parent_path_entry):
+def create_dashboard_buttons(dashboard_frame, parent_path_entry, console):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
-        text="Sort Files", command=lambda: helpers.handle_sort_button(parent_path_entry, dashboard_frame))
+        text="Sort Files", command=lambda: helpers.handle_sort_button(parent_path_entry, dashboard_frame, console))
     sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
