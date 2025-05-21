@@ -1,4 +1,4 @@
-import core.logic as core
+import core.logic as logic
 import gui.components as components
 import gui.state as state
 from pathlib import Path
@@ -40,18 +40,18 @@ def get_parent_folder_path(parent_path_entry):
 
 def handle_sort_button(parent_path_entry):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
-    is_successful, create_errors = core.create_folders(parent_folder_path)
-    has_source_files, report, renamed_files, is_successful, sort_errors = core.sort_files(
+    logic.create_folders(parent_folder_path)
+    has_source_files, report, renamed_files, is_successful, sort_errors = logic.sort_files(
         parent_folder_path)
 
 
 def handle_unsort_button(parent_path_entry):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
-    renamed_files, is_successful, unsort_errors = core.unsort_files(
+    renamed_files, is_successful, unsort_errors = logic.unsort_files(
         parent_folder_path)
 
 
 def handle_delete_folders_button(parent_path_entry):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
-    is_successful, delete_errors = core.delete_empty_folders(
+    is_successful, delete_errors = logic.delete_empty_folders(
         parent_folder_path)

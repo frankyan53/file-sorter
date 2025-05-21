@@ -39,7 +39,6 @@ def create_main_frames(app):
 
 
 def create_sidebar_button(sidebar, text):
-    global active_sidebar_button
     button = ctk.CTkButton(sidebar, text=text, width=160, height=35, fg_color="transparent",
                            hover=False, text_color="white", font=("Roboto", 14, "bold"), anchor="w")
     button.pack(pady=(10, 5))
