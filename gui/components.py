@@ -107,7 +107,7 @@ def create_get_parent_folder_entry(parent_path_frame):
 def create_parent_path_status_label(parent_path_frame, text):
     status_label = ctk.CTkLabel(parent_path_frame, text=text, font=(
         "Roboto", 14), text_color="black", fg_color="transparent")
-    status_label.place(x=15, y=42.5)
+    status_label.place(x=10, y=42.5)
 
 
 def create_dashboard_button(frame):
