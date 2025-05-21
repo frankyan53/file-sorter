@@ -62,8 +62,8 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         console.insert("end", "Some files could not be sorted.\n")
     elif is_successful and not sort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "✔️ Files sorted successfully.")
-        console.insert("end", "Files sorted successfully.\n")
+            dashboard_frame, "✔️ Files sorted.")
+        console.insert("end", "Files sorted.\n")
     else:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files have already been sorted.")
