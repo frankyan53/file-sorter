@@ -91,7 +91,7 @@ def create_get_parent_folder_frame(dashboard_frame):
     return parent_path_frame
 
 
-def get_parent_folder_path(parent_path_frame):
+def create_get_parent_folder_entry(parent_path_frame):
     parent_path_entry = ctk.CTkEntry(parent_path_frame, width=450, height=30, corner_radius=5, fg_color="transparent", text_color="black", font=(
         "Roboto", 14), placeholder_text="Enter folder path...", placeholder_text_color="gray", border_color="#2c8850", border_width=2, state="disabled")
     parent_path_entry.pack(side="left", padx=10, pady=5)
