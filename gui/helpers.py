@@ -75,6 +75,9 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
                 console.insert(
                     "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
         console.insert("end", "\n")
+    for file in renamed_files:
+        console.insert(
+            "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
