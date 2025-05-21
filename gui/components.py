@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import gui.helpers as helpers
+import gui.state as state
 from PIL import Image
 
 
@@ -44,11 +45,11 @@ def create_sidebar_button(sidebar, text):
     button.pack(pady=(10, 5))
 
     def on_enter(e):
-        if button != active_sidebar_button:
+        if button != state.active_sidebar_button:
             button.configure(fg_color="white", text_color="#2c8850")
 
     def on_leave(e):
-        if button != active_sidebar_button:
+        if button != state.active_sidebar_button:
             button.configure(fg_color="transparent", text_color="white")
 
     button.bind("<Enter>", on_enter)

@@ -1,12 +1,12 @@
 import core.logic as core
 import gui.components as components
+import gui.state as state
 from pathlib import Path
 from tkinter import filedialog
 
 
 def handle_sidebar_button(frame, button, sidebar_buttons):
-    global active_sidebar_button
-    active_sidebar_button = button
+    state.active_sidebar_button = button
     frame.lift()
     button.configure(text_color="#2c8850", fg_color="white")
     for sidebar_button in sidebar_buttons:
