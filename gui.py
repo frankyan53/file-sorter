@@ -89,7 +89,7 @@ def handle_sidebar_button(frame, button, sidebar_buttons):
 def create_get_parent_folder_frame(dashboard_frame):
     parent_path_frame = ctk.CTkFrame(
         dashboard_frame, width=550, height=60, corner_radius=5, fg_color="#f0ecec")
-    parent_path_frame.place(x=25, y=150)
+    parent_path_frame.place(x=25, y=25)
     parent_path_frame.pack_propagate(False)
     return parent_path_frame
 
@@ -124,15 +124,15 @@ def create_dashboard_buttons(dashboard_frame, parent_path_entry):
     sort_button = create_dashboard_button(dashboard_frame)
     sort_button.configure(
         text="Sort Files", command=lambda: handle_sort_button(parent_path_entry))
-    sort_button.place(x=25, y=25)
+    sort_button.place(x=25, y=110)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files",
                             command=lambda: handle_unsort_button(parent_path_entry))
-    unsort_button.place(x=216.66, y=25)
+    unsort_button.place(x=216.66, y=110)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(
         text="Delete Empty Files", command=lambda: handle_delete_folders_button(parent_path_entry))
-    delete_folders_button.place(x=408.32, y=25)
+    delete_folders_button.place(x=408.32, y=110)
     return sort_button, unsort_button, delete_folders_button
 
 
