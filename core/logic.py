@@ -62,6 +62,8 @@ def sort_files(parent_folder_path):
 
 
 def unsort_files(parent_folder_path):
+    unsorted_file_count = 0
+    deleted_folder_count = 0
     renamed_files = []
     is_successful = False
     unsort_errors = []
@@ -83,6 +85,7 @@ def unsort_files(parent_folder_path):
                     shutil.move(destination_file_path,
                                 renamed_source_file_path)
                     is_successful = True
+                    unsorted_file_count += 1
                 except Exception as error:
                     utils.append_error_dict(
                         unsort_errors, destination_file_path, "moving file", error)
@@ -91,13 +94,14 @@ def unsort_files(parent_folder_path):
                     renamed_files, original_source_file_path, renamed_source_file_path)
             try:
                 child_folder_path.rmdir()
+                deleted_folder_count += 1
             except Exception as error:
                 utils.append_error_dict(unsort_errors,
                                         child_folder_path, "deleting folder", error)
         else:
             continue
     utils.write_json("logs/unsort_errors.json", unsort_errors)
-    return renamed_files, is_successful, unsort_errors
+    return unsorted_file_count, deleted_folder_count, renamed_files, is_successful, unsort_errors
 
 
 def delete_empty_folders(parent_folder_path):

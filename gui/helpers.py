@@ -66,24 +66,41 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
                     "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
     for file in renamed_files:
         console.insert(
-            "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+            "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
     console.insert("end", "\n")
     console.see("end")
 
 
-def handle_unsort_button(parent_path_entry, dashboard_frame):
+def handle_unsort_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
-    renamed_files, is_successful, unsort_errors = logic.unsort_files(
+    unsorted_file_count, deleted_folder_count, renamed_files, is_successful, unsort_errors = logic.unsort_files(
         parent_folder_path)
     if not is_successful and unsort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "❌ Failed to unsort files.")
-    elif is_successful and unsort_errors:
+    if is_successful and unsort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "⚠️ Some files could not be unsorted.")
-    else:
+    if is_successful and not unsort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files unsorted.")
+    if unsorted_file_count == 0 and deleted_folder_count == 0:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "ℹ️ Nothing to unsort.")
+    else:
+        if state.console_placeholder_text:
+            console.delete("1.0", "end")
+            state.console_placeholder_text = False
+        console.insert("end", "--- Unsort Report ---\n")
+        console.insert(
+            "end", f"{unsorted_file_count} file{"s" if unsorted_file_count != 1 else ""} unsorted.\n")
+        console.insert(
+            "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
+    for file in renamed_files:
+        console.insert(
+            f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
+    console.insert("end", "\n")
+    console.see("end")
 
 
 def handle_delete_folders_button(parent_path_entry, dashboard_frame):

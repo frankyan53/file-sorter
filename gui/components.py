@@ -123,7 +123,7 @@ def create_dashboard_buttons(dashboard_frame, parent_path_entry, console):
     sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
     unsort_button.configure(text="Unsort Files", command=lambda: helpers.handle_unsort_button(
-        parent_path_entry, dashboard_frame))
+        parent_path_entry, dashboard_frame, console))
     unsort_button.place(x=216.66, y=170)
     delete_folders_button = create_dashboard_button(dashboard_frame)
     delete_folders_button.configure(text="Delete Empty Files", command=lambda: helpers.handle_delete_folders_button(
