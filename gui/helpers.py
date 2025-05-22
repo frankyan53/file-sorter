@@ -64,11 +64,11 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
             if files_moved > 0:
                 console.insert(
                     "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
-    for file in renamed_files:
-        console.insert(
-            "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
-    console.insert("end", "\n")
-    console.see("end")
+        for file in renamed_files:
+            console.insert(
+                "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
+        console.insert("end", "\n")
+        console.see("end")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
@@ -96,23 +96,35 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
             "end", f"{unsorted_file_count} file{"s" if unsorted_file_count != 1 else ""} unsorted.\n")
         console.insert(
             "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
-    for file in renamed_files:
-        console.insert(
-            f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
-    console.insert("end", "\n")
-    console.see("end")
+        for file in renamed_files:
+            console.insert(
+                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
+        console.insert("end", "\n")
+        console.see("end")
 
 
-def handle_delete_folders_button(parent_path_entry, dashboard_frame):
+def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
-    is_successful, delete_errors = logic.delete_empty_folders(
+    deleted_folder_count, is_successful, delete_errors = logic.delete_empty_folders(
         parent_folder_path)
     if not is_successful and delete_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "❌ Failed to delete empty folders.")
-    elif is_successful and delete_errors:
+    if is_successful and delete_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "⚠️ Some folders could not be deleted.")
-    else:
+    if is_successful and not delete_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Folders deleted.")
+    if deleted_folder_count == 0:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "ℹ️ Nothing to delete.")
+    else:
+        if state.console_placeholder_text:
+            console.delete("1.0", "end")
+            state.console_placeholder_text = False
+        console.insert("end", "--- Delete Report ---\n")
+        console.insert(
+            "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
+        console.insert("end", "\n")
+        console.see("end")
