@@ -5,6 +5,11 @@ from pathlib import Path
 from tkinter import filedialog
 
 
+def get_parent_folder_path(parent_path_entry):
+    parent_folder_path = Path(parent_path_entry.get())
+    return parent_folder_path
+
+
 def log_to_console(console, lines):
     console.configure(state="normal")
     if state.console_placeholder_text:
@@ -43,11 +48,6 @@ def handle_parent_path_button(parent_path_entry, parent_path_frame):
         parent_path_entry.configure(state="disabled")
         components.create_parent_path_status_label(
             parent_path_frame, "✔️ Folder selected.                        ")
-
-
-def get_parent_folder_path(parent_path_entry):
-    parent_folder_path = Path(parent_path_entry.get())
-    return parent_folder_path
 
 
 def handle_sort_button(parent_path_entry, dashboard_frame, console):
