@@ -5,6 +5,12 @@ from pathlib import Path
 from tkinter import filedialog
 
 
+def delete_placeholder_text(console):
+    if state.console_placeholder_text:
+        console.delete("1.0", "end")
+        state.console_placeholder_text = False
+
+
 def handle_sidebar_button(frame, button, sidebar_buttons):
     state.active_sidebar_button = button
     frame.lift()
@@ -59,9 +65,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to sort.                                     ")
         console.configure(state="normal")
-        if state.console_placeholder_text:
-            console.delete("1.0", "end")
-            state.console_placeholder_text = False
+        delete_placeholder_text(console)
         console.insert("end", "--- Sort Report ---\n")
         console.insert(
             "end", f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created.\n")
@@ -69,9 +73,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         console.see("end")
         console.configure(state="disabled")
     elif has_source_files and created_folders_counter == 0:
-        if state.console_placeholder_text:
-            console.delete("1.0", "end")
-            state.console_placeholder_text = False
+        delete_placeholder_text(console)
         console.configure(state="normal")
         console.insert("end", "--- Sort Report ---\n")
         for child_folder, files_moved in report.items():
@@ -86,9 +88,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         console.configure(state="disabled")
     else:
         console.configure(state="normal")
-        if state.console_placeholder_text:
-            console.delete("1.0", "end")
-            state.console_placeholder_text = False
+        delete_placeholder_text(console)
         console.insert("end", "--- Sort Report ---\n")
         console.insert(
             "end", f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created.\n")
@@ -122,9 +122,7 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
             dashboard_frame, "ℹ️ Nothing to unsort.                                   ")
     elif unsorted_file_count == 0 and deleted_folder_count > 0:
         console.configure(state="normal")
-        if state.console_placeholder_text:
-            console.delete("1.0", "end")
-            state.console_placeholder_text = False
+        delete_placeholder_text(console)
         console.insert("end", "--- Unsort Report ---\n")
         console.insert(
             "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
@@ -133,9 +131,7 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
         console.configure(state="disabled")
     else:
         console.configure(state="normal")
-        if state.console_placeholder_text:
-            console.delete("1.0", "end")
-            state.console_placeholder_text = False
+        delete_placeholder_text(console)
         console.insert("end", "--- Unsort Report ---\n")
         console.insert(
             "end", f"{unsorted_file_count} file{"s" if unsorted_file_count != 1 else ""} unsorted.\n")
@@ -167,9 +163,7 @@ def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
             dashboard_frame, "ℹ️ Nothing to delete.                                   ")
     else:
         console.configure(state="normal")
-        if state.console_placeholder_text:
-            console.delete("1.0", "end")
-            state.console_placeholder_text = False
+        delete_placeholder_text(console)
         console.insert("end", "--- Delete Report ---\n")
         console.insert(
             "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
