@@ -3,25 +3,27 @@ import shutil
 
 
 def create_folders(parent_folder_path):
+    created_folder_count = 0
     is_successful = False
     create_errors = []
     child_folders = utils.load_json("config/child_folders.json")
     for folder in child_folders:
         child_folder_path = parent_folder_path / folder
         try:
-            child_folder_path.mkdir(exist_ok=True)
+            child_folder_path.mkdir()
             is_successful = True
+            created_folder_count += 1
         except Exception as error:
             utils.append_error_dict(create_errors,
                                     parent_folder_path, "creating folders", error)
     utils.write_json("logs/create_errors.json", create_errors)
-    return is_successful, create_errors
+    return created_folder_count
 
 
 def sort_files(parent_folder_path):
     has_source_files = False
     folder_extensions = utils.load_json("config/folder_extensions.json")
-    report = {
+    sort_report = {
         child_folder: 0 for child_folder in folder_extensions}
     renamed_files = []
     is_successful = False
@@ -31,7 +33,7 @@ def sort_files(parent_folder_path):
     except Exception as error:
         utils.append_error_dict(sort_errors, parent_folder_path,
                                 "iterating through folder", error)
-        return has_source_files, report, renamed_files, is_successful, sort_errors
+        return has_source_files, sort_report, renamed_files, is_successful, sort_errors
     for source_file_path in parent_files:
         if source_file_path.is_dir():
             continue
@@ -53,12 +55,12 @@ def sort_files(parent_folder_path):
             is_successful = True
             utils.append_rename_dict(
                 renamed_files, destination_file_path, renamed_destination_file_path)
-            report[child_folder] += 1
+            sort_report[child_folder] += 1
         except Exception as error:
             utils.append_error_dict(sort_errors,
                                     source_file_path, "moving file", error)
     utils.write_json("logs/sort_errors.json", sort_errors)
-    return has_source_files, report, renamed_files, is_successful, sort_errors
+    return has_source_files, sort_report, renamed_files, is_successful, sort_errors
 
 
 def unsort_files(parent_folder_path):

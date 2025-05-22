@@ -40,7 +40,7 @@ def get_parent_folder_path(parent_path_entry):
 
 def handle_sort_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
-    logic.create_folders(parent_folder_path)
+    created_folders_counter = logic.create_folders(parent_folder_path)
     has_source_files, report, renamed_files, is_successful, sort_errors = logic.sort_files(
         parent_folder_path)
     if not is_successful and sort_errors:
@@ -52,15 +52,46 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
     if is_successful and not sort_errors:
         components.create_dashboard_button_status_label(
             dashboard_frame, "✔️ Files sorted.                              ")
-    if not has_source_files:
+    if not has_source_files and created_folders_counter == 0:
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to sort.                           ")
+    elif not has_source_files and created_folders_counter > 0:
+        components.create_dashboard_button_status_label(
+            dashboard_frame, "ℹ️ Nothing to sort.                           ")
+        console.configure(state="normal")
+        if state.console_placeholder_text:
+            console.delete("1.0", "end")
+            state.console_placeholder_text = False
+        console.insert("end", "--- Sort Report ---\n")
+        console.insert(
+            "end", f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created.\n")
+        console.insert("end", "\n")
+        console.see("end")
+        console.configure(state="disabled")
+    elif has_source_files and created_folders_counter == 0:
+        if state.console_placeholder_text:
+            console.delete("1.0", "end")
+            state.console_placeholder_text = False
+        console.configure(state="normal")
+        console.insert("end", "--- Sort Report ---\n")
+        for child_folder, files_moved in report.items():
+            if files_moved > 0:
+                console.insert(
+                    "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
+        for file in renamed_files:
+            console.insert(
+                "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
+        console.insert("end", "\n")
+        console.see("end")
+        console.configure(state="disabled")
     else:
         console.configure(state="normal")
         if state.console_placeholder_text:
             console.delete("1.0", "end")
             state.console_placeholder_text = False
         console.insert("end", "--- Sort Report ---\n")
+        console.insert(
+            "end", f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created.\n")
         for child_folder, files_moved in report.items():
             if files_moved > 0:
                 console.insert(
