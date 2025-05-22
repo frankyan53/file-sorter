@@ -120,6 +120,17 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
     if unsorted_file_count == 0 and deleted_folder_count == 0:
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to unsort.                                   ")
+    elif unsorted_file_count == 0 and deleted_folder_count > 0:
+        console.configure(state="normal")
+        if state.console_placeholder_text:
+            console.delete("1.0", "end")
+            state.console_placeholder_text = False
+        console.insert("end", "--- Unsort Report ---\n")
+        console.insert(
+            "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
+        console.insert("end", "\n")
+        console.see("end")
+        console.configure(state="disabled")
     else:
         console.configure(state="normal")
         if state.console_placeholder_text:
