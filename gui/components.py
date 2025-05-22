@@ -139,9 +139,9 @@ def create_dashboard_button_status_label(dashboard_frame, text):
 
 
 def create_dashboard_console(dashboard_frame):
-    console = ctk.CTkTextbox(dashboard_frame, width=550, height=180, corner_radius=5, font=(
+    console = ctk.CTkTextbox(dashboard_frame, width=550, height=170, corner_radius=5, font=(
         "Courier New", 12), text_color="black", fg_color="#f0ecec", wrap="word")
-    console.place(x=25, y=295)
+    console.place(x=25, y=305)
     console.tag_config("placeholder", foreground="grey")
     console.insert("end", "Console output will appear here...", "placeholder")
     console.configure(state="disabled")
