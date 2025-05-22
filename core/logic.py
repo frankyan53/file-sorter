@@ -115,6 +115,8 @@ def delete_empty_folders(parent_folder_path):
         child_folder_path = parent_folder_path / folder
         try:
             destination_files = child_folder_path.iterdir()
+        except FileNotFoundError:
+            continue
         except Exception as error:
             utils.append_error_dict(
                 delete_errors, child_folder_path, "iterating through folder", error)
