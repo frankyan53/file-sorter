@@ -107,6 +107,7 @@ def unsort_files(parent_folder_path):
 
 
 def delete_empty_folders(parent_folder_path):
+    deleted_folder_count = 0
     is_successful = False
     delete_errors = []
     child_folders = utils.load_json("config/child_folders.json")
@@ -122,8 +123,9 @@ def delete_empty_folders(parent_folder_path):
             try:
                 child_folder_path.rmdir()
                 is_successful = True
+                deleted_folder_count += 1
             except Exception as error:
                 utils.append_error_dict(delete_errors,
                                         child_folder_path, "deleting folder", error)
     utils.write_json("logs/delete_errors.json", delete_errors)
-    return is_successful, delete_errors
+    return deleted_folder_count, is_successful, delete_errors
