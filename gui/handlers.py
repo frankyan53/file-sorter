@@ -1,35 +1,8 @@
 import core.logic as logic
 import gui.components as components
 import gui.state as state
-from pathlib import Path
+import gui.utils as utils
 from tkinter import filedialog
-
-
-def get_parent_folder_path(parent_path_entry):
-    parent_folder_path = Path(parent_path_entry.get())
-    return parent_folder_path
-
-
-def log_to_console(console, lines):
-    console.configure(state="normal")
-    if state.console_placeholder_text:
-        console.delete("1.0", "end")
-        state.console_placeholder_text = False
-    for line in lines:
-        console.insert("end", line + "\n")
-    console.insert("end", "\n")
-    console.see("end")
-    console.configure(state="disabled")
-
-
-def append_sort_report(lines, sort_report, renamed_files):
-    for child_folder, files_moved in sort_report.items():
-        if files_moved > 0:
-            lines.append(
-                f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.")
-    for file in renamed_files:
-        lines.append(
-            f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
 
 
 def handle_sidebar_button(frame, button, sidebar_buttons):
@@ -61,7 +34,7 @@ def handle_parent_path_button(parent_path_entry, parent_path_frame):
 
 
 def handle_sort_button(parent_path_entry, dashboard_frame, console):
-    parent_folder_path = get_parent_folder_path(parent_path_entry)
+    parent_folder_path = utils.get_parent_folder_path(parent_path_entry)
     created_folders_counter = logic.create_folders(parent_folder_path)
     has_source_files, sort_report, renamed_files, is_successful, sort_errors = logic.sort_files(
         parent_folder_path)
@@ -82,20 +55,20 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
             dashboard_frame, "ℹ️ Nothing to sort.                                     ")
         lines = ["--- Sort Report ---",
                  f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created."]
-        log_to_console(console, lines)
+        utils.log_to_console(console, lines)
     elif has_source_files and created_folders_counter == 0:
         lines = ["--- Sort Report ---"]
-        append_sort_report(lines, sort_report, renamed_files)
-        log_to_console(console, lines)
+        utils.append_sort_report(lines, sort_report, renamed_files)
+        utils.log_to_console(console, lines)
     else:
         lines = ["--- Sort Report ---",
                  f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created."]
-        append_sort_report(lines, sort_report, renamed_files)
-        log_to_console(console, lines)
+        utils.append_sort_report(lines, sort_report, renamed_files)
+        utils.log_to_console(console, lines)
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
-    parent_folder_path = get_parent_folder_path(parent_path_entry)
+    parent_folder_path = utils.get_parent_folder_path(parent_path_entry)
     unsorted_file_count, deleted_folder_count, renamed_files, is_successful, unsort_errors = logic.unsort_files(
         parent_folder_path)
     if not is_successful and unsort_errors:
@@ -113,18 +86,18 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
     elif unsorted_file_count == 0 and deleted_folder_count > 0:
         lines = ["--- Unsort Report ---",
                  f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted."]
-        log_to_console(console, lines)
+        utils.log_to_console(console, lines)
     else:
         lines = ["--- Unsort Report ---", f"{unsorted_file_count} file{"s" if unsorted_file_count != 1 else ""} unsorted.",
                  f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted."]
         for file in renamed_files:
             lines.append(
                 f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
-        log_to_console(console, lines)
+        utils.log_to_console(console, lines)
 
 
 def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
-    parent_folder_path = get_parent_folder_path(parent_path_entry)
+    parent_folder_path = utils.get_parent_folder_path(parent_path_entry)
     deleted_folder_count, is_successful, delete_errors = logic.delete_empty_folders(
         parent_folder_path)
     if not is_successful and delete_errors:
@@ -142,4 +115,4 @@ def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
     else:
         lines = ["--- Delete Report ---",
                  f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted."]
-        log_to_console(console, lines)
+        utils.log_to_console(console, lines)

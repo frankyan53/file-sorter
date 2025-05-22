@@ -1,5 +1,5 @@
 import customtkinter as ctk
-import gui.helpers as helpers
+import gui.handlers as handlers
 import gui.state as state
 from PIL import Image
 
@@ -61,11 +61,11 @@ def create_sidebar_buttons(sidebar, dashboard_frame, defaults_frame, settings_fr
     defaults_button = create_sidebar_button(sidebar, "Defaults")
     settings_button = create_sidebar_button(sidebar, "Settings")
     sidebar_buttons = (dashboard_button, defaults_button, settings_button)
-    dashboard_button.configure(command=lambda: helpers.handle_sidebar_button(
+    dashboard_button.configure(command=lambda: handlers.handle_sidebar_button(
         dashboard_frame, dashboard_button, sidebar_buttons))
-    defaults_button.configure(command=lambda: helpers.handle_sidebar_button(
+    defaults_button.configure(command=lambda: handlers.handle_sidebar_button(
         defaults_frame, defaults_button, sidebar_buttons))
-    settings_button.configure(command=lambda: helpers.handle_sidebar_button(
+    settings_button.configure(command=lambda: handlers.handle_sidebar_button(
         settings_frame, settings_button, sidebar_buttons))
     return dashboard_button, defaults_button, settings_button, sidebar_buttons
 
@@ -98,7 +98,7 @@ def create_get_parent_folder_entry(parent_path_frame):
     parent_path_entry.place(x=10, y=10)
     parent_path_entry.propagate(False)
     parent_path_button = ctk.CTkButton(parent_path_frame, text="Browse", width=50, height=30, corner_radius=10, fg_color="#2c8850", font=(
-        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: helpers.handle_parent_path_button(parent_path_entry, parent_path_frame))
+        "Roboto", 14), hover=True, hover_color="#3cae68", command=lambda: handlers.handle_parent_path_button(parent_path_entry, parent_path_frame))
     parent_path_button.place(x=470, y=10)
     create_parent_path_status_label(parent_path_frame, "❌ No folder selected.")
     return parent_path_entry
@@ -118,15 +118,15 @@ def create_dashboard_button(frame):
 
 def create_dashboard_buttons(dashboard_frame, parent_path_entry, console):
     sort_button = create_dashboard_button(dashboard_frame)
-    sort_button.configure(text="Sort Files", command=lambda: helpers.handle_sort_button(
+    sort_button.configure(text="Sort Files", command=lambda: handlers.handle_sort_button(
         parent_path_entry, dashboard_frame, console))
     sort_button.place(x=25, y=170)
     unsort_button = create_dashboard_button(dashboard_frame)
-    unsort_button.configure(text="Unsort Files", command=lambda: helpers.handle_unsort_button(
+    unsort_button.configure(text="Unsort Files", command=lambda: handlers.handle_unsort_button(
         parent_path_entry, dashboard_frame, console))
     unsort_button.place(x=216.66, y=170)
     delete_folders_button = create_dashboard_button(dashboard_frame)
-    delete_folders_button.configure(text="Delete Empty Folders", command=lambda: helpers.handle_delete_folders_button(
+    delete_folders_button.configure(text="Delete Empty Folders", command=lambda: handlers.handle_delete_folders_button(
         parent_path_entry, dashboard_frame, console))
     delete_folders_button.place(x=408.32, y=170)
     return sort_button, unsort_button, delete_folders_button

@@ -1,5 +1,5 @@
 import gui.components as components
-import gui.helpers as helpers
+import gui.handlers as handlers
 
 
 def launch():
@@ -12,7 +12,7 @@ def launch():
         dashboard_frame, defaults_frame, settings_frame)
     dashboard_button, defaults_button, settings_button, sidebar_buttons = components.create_sidebar_buttons(
         sidebar, dashboard_frame, defaults_frame, settings_frame)
-    helpers.handle_sidebar_button(
+    handlers.handle_sidebar_button(
         dashboard_frame, dashboard_button, sidebar_buttons)
     parent_path_frame = components.create_get_parent_folder_frame(
         dashboard_frame)
