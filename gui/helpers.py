@@ -53,7 +53,7 @@ def get_parent_folder_path(parent_path_entry):
 def handle_sort_button(parent_path_entry, dashboard_frame, console):
     parent_folder_path = get_parent_folder_path(parent_path_entry)
     created_folders_counter = logic.create_folders(parent_folder_path)
-    has_source_files, report, renamed_files, is_successful, sort_errors = logic.sort_files(
+    has_source_files, sort_report, renamed_files, is_successful, sort_errors = logic.sort_files(
         parent_folder_path)
     if not is_successful and sort_errors:
         components.create_dashboard_button_status_label(
@@ -70,44 +70,30 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
     elif not has_source_files and created_folders_counter > 0:
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to sort.                                     ")
-        console.configure(state="normal")
-        delete_placeholder_text(console)
-        console.insert("end", "--- Sort Report ---\n")
-        console.insert(
-            "end", f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created.\n")
-        console.insert("end", "\n")
-        console.see("end")
-        console.configure(state="disabled")
+        lines = ["--- Sort Report ---",
+                 f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created."]
+        log_to_console(console, lines)
     elif has_source_files and created_folders_counter == 0:
-        delete_placeholder_text(console)
-        console.configure(state="normal")
-        console.insert("end", "--- Sort Report ---\n")
-        for child_folder, files_moved in report.items():
+        lines = ["--- Sort Report ---"]
+        for child_folder, files_moved in sort_report.items():
             if files_moved > 0:
-                console.insert(
-                    "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
+                lines.append(
+                    f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.")
         for file in renamed_files:
-            console.insert(
-                "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
-        console.insert("end", "\n")
-        console.see("end")
-        console.configure(state="disabled")
+            lines.append(
+                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+        log_to_console(console, lines)
     else:
-        console.configure(state="normal")
-        delete_placeholder_text(console)
-        console.insert("end", "--- Sort Report ---\n")
-        console.insert(
-            "end", f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created.\n")
-        for child_folder, files_moved in report.items():
+        lines = ["--- Sort Report ---",
+                 f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created."]
+        for child_folder, files_moved in sort_report.items():
             if files_moved > 0:
-                console.insert(
-                    "end", f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.\n")
+                lines.append(
+                    f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.")
         for file in renamed_files:
-            console.insert(
-                "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
-        console.insert("end", "\n")
-        console.see("end")
-        console.configure(state="disabled")
+            lines.append(
+                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+        log_to_console(console, lines)
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
@@ -127,28 +113,16 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to unsort.                                   ")
     elif unsorted_file_count == 0 and deleted_folder_count > 0:
-        console.configure(state="normal")
-        delete_placeholder_text(console)
-        console.insert("end", "--- Unsort Report ---\n")
-        console.insert(
-            "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
-        console.insert("end", "\n")
-        console.see("end")
-        console.configure(state="disabled")
+        lines = ["--- Unsort Report ---",
+                 f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted."]
+        log_to_console(console, lines)
     else:
-        console.configure(state="normal")
-        delete_placeholder_text(console)
-        console.insert("end", "--- Unsort Report ---\n")
-        console.insert(
-            "end", f"{unsorted_file_count} file{"s" if unsorted_file_count != 1 else ""} unsorted.\n")
-        console.insert(
-            "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
+        lines = ["--- Unsort Report ---", f"{unsorted_file_count} file{"s" if unsorted_file_count != 1 else ""} unsorted.",
+                 f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted."]
         for file in renamed_files:
-            console.insert(
-                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
-        console.insert("end", "\n")
-        console.see("end")
-        console.configure(state="disabled")
+            lines.append(
+                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+        log_to_console(console, lines)
 
 
 def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
@@ -168,11 +142,6 @@ def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to delete.                                   ")
     else:
-        console.configure(state="normal")
-        delete_placeholder_text(console)
-        console.insert("end", "--- Delete Report ---\n")
-        console.insert(
-            "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
-        console.insert("end", "\n")
-        console.see("end")
-        console.configure(state="disabled")
+        lines = ["--- Delete Report ---",
+                 f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted."]
+        log_to_console(console, lines)
