@@ -56,6 +56,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to sort.")
     else:
+        console.configure(state="normal")
         if state.console_placeholder_text:
             console.delete("1.0", "end")
             state.console_placeholder_text = False
@@ -69,6 +70,7 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
                 "end", f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
         console.insert("end", "\n")
         console.see("end")
+        console.configure(state="disabled")
 
 
 def handle_unsort_button(parent_path_entry, dashboard_frame, console):
@@ -88,6 +90,7 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to unsort.")
     else:
+        console.configure(state="normal")
         if state.console_placeholder_text:
             console.delete("1.0", "end")
             state.console_placeholder_text = False
@@ -101,6 +104,7 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
                 f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.\n")
         console.insert("end", "\n")
         console.see("end")
+        console.configure(state="disabled")
 
 
 def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
@@ -120,6 +124,7 @@ def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
         components.create_dashboard_button_status_label(
             dashboard_frame, "ℹ️ Nothing to delete.")
     else:
+        console.configure(state="normal")
         if state.console_placeholder_text:
             console.delete("1.0", "end")
             state.console_placeholder_text = False
@@ -128,3 +133,4 @@ def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
             "end", f"{deleted_folder_count} folder{"s" if deleted_folder_count != 1 else ""} deleted.\n")
         console.insert("end", "\n")
         console.see("end")
+        console.configure(state="disabled")

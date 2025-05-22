@@ -144,4 +144,5 @@ def create_dashboard_console(dashboard_frame):
     console.place(x=25, y=295)
     console.tag_config("placeholder", foreground="grey")
     console.insert("end", "Console output will appear here...", "placeholder")
+    console.configure(state="disabled")
     return console
