@@ -110,26 +110,40 @@ def create_parent_path_status_label(parent_path_frame, text):
     status_label.place(x=10, y=42.5)
 
 
-def create_dashboard_button(frame):
-    button = ctk.CTkButton(frame, width=166.66, height=100, font=(
-        "Roboto", 14), corner_radius=5, fg_color="#2c8850", hover=True, hover_color="#3cae68")
-    return button
+def create_dashboard_button(frame, image, text):
+    button = ctk.CTkButton(frame, width=166.66, height=100,
+                           corner_radius=5, fg_color="#2c8850", hover=False)
+    button_image = ctk.CTkImage(Image.open(image), size=(80, 80))
+    button_image = ctk.CTkLabel(
+        button, text="", image=button_image, fg_color="transparent")
+    button_text = ctk.CTkLabel(button, text=text, font=(
+        "Roboto", 14, "bold"), text_color="white")
+    return button, button_image, button_text
 
 
 def create_dashboard_buttons(dashboard_frame, parent_path_entry, console):
-    sort_button = create_dashboard_button(dashboard_frame)
-    sort_button.configure(text="Sort Files", command=lambda: handlers.handle_sort_button(
+    sort_button, sort_button_image, sort_button_text = create_dashboard_button(
+        dashboard_frame, "assets/sort_button_image.png", "Sort Files")
+    sort_button.configure(command=lambda: handlers.handle_sort_button(
         parent_path_entry, dashboard_frame, console))
     sort_button.place(x=25, y=170)
-    unsort_button = create_dashboard_button(dashboard_frame)
-    unsort_button.configure(text="Unsort Files", command=lambda: handlers.handle_unsort_button(
+    sort_button_image.place(x=45, y=0)
+    sort_button_text.place(x=50, y=70)
+
+    unsort_button, unsort_button_image, unsort_button_text = create_dashboard_button(
+        dashboard_frame, "assets/unsort_button_image.png", "Unsort Files")
+    unsort_button.configure(command=lambda: handlers.handle_unsort_button(
         parent_path_entry, dashboard_frame, console))
     unsort_button.place(x=216.66, y=170)
-    delete_folders_button = create_dashboard_button(dashboard_frame)
-    delete_folders_button.configure(text="Delete Empty Folders", command=lambda: handlers.handle_delete_folders_button(
+    unsort_button_image.place(x=45, y=0)
+    unsort_button_text.place(x=40, y=70)
+    delete_button, delete_button_image, delete_button_text = create_dashboard_button(
+        dashboard_frame, "assets/delete_button_image.png", "Delete Empty Folders")
+    delete_button.configure(command=lambda: handlers.handle_delete_folders_button(
         parent_path_entry, dashboard_frame, console))
-    delete_folders_button.place(x=408.32, y=170)
-    return sort_button, unsort_button, delete_folders_button
+    delete_button.place(x=408.32, y=170)
+    delete_button_image.place(x=45, y=0)
+    delete_button_text.place(x=8, y=70)
 
 
 def create_dashboard_button_status_label(dashboard_frame, text):
