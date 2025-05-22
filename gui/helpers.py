@@ -22,6 +22,16 @@ def log_to_console(console, lines):
     console.configure(state="disabled")
 
 
+def append_sort_report(lines, sort_report, renamed_files):
+    for child_folder, files_moved in sort_report.items():
+        if files_moved > 0:
+            lines.append(
+                f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.")
+    for file in renamed_files:
+        lines.append(
+            f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+
+
 def handle_sidebar_button(frame, button, sidebar_buttons):
     state.active_sidebar_button = button
     frame.lift()
@@ -75,24 +85,12 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         log_to_console(console, lines)
     elif has_source_files and created_folders_counter == 0:
         lines = ["--- Sort Report ---"]
-        for child_folder, files_moved in sort_report.items():
-            if files_moved > 0:
-                lines.append(
-                    f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.")
-        for file in renamed_files:
-            lines.append(
-                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+        append_sort_report(lines, sort_report, renamed_files)
         log_to_console(console, lines)
     else:
         lines = ["--- Sort Report ---",
                  f"{created_folders_counter} folder{"s" if created_folders_counter != 1 else ""} created."]
-        for child_folder, files_moved in sort_report.items():
-            if files_moved > 0:
-                lines.append(
-                    f"{files_moved} file{"s" if files_moved != 1 else ""} moved into {child_folder}.")
-        for file in renamed_files:
-            lines.append(
-                f"{file["original"]} was renamed to {file["renamed"]} due to a duplicate filename.")
+        append_sort_report(lines, sort_report, renamed_files)
         log_to_console(console, lines)
 
 
