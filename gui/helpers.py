@@ -5,10 +5,16 @@ from pathlib import Path
 from tkinter import filedialog
 
 
-def delete_placeholder_text(console):
+def log_to_console(console, lines):
+    console.configure(state="normal")
     if state.console_placeholder_text:
         console.delete("1.0", "end")
         state.console_placeholder_text = False
+    for line in lines:
+        console.insert("end", line + "\n")
+    console.insert("end", "\n")
+    console.see("end")
+    console.configure(state="disabled")
 
 
 def handle_sidebar_button(frame, button, sidebar_buttons):
