@@ -45,16 +45,16 @@ def handle_sort_button(parent_path_entry, dashboard_frame, console):
         parent_folder_path)
     if not is_successful and sort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "❌ Failed to sort files.")
+            dashboard_frame, "❌ Failed to sort files.                      ")
     if is_successful and sort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "⚠️ Some files could not be sorted.")
+            dashboard_frame, "⚠️ Some files could not be sorted.            ")
     if is_successful and not sort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "✔️ Files sorted.")
+            dashboard_frame, "✔️ Files sorted.                              ")
     if not has_source_files:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "ℹ️ Nothing to sort.")
+            dashboard_frame, "ℹ️ Nothing to sort.                           ")
     else:
         console.configure(state="normal")
         if state.console_placeholder_text:
@@ -79,16 +79,16 @@ def handle_unsort_button(parent_path_entry, dashboard_frame, console):
         parent_folder_path)
     if not is_successful and unsort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "❌ Failed to unsort files.")
+            dashboard_frame, "❌ Failed to unsort files.                    ")
     if is_successful and unsort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "⚠️ Some files could not be unsorted.")
+            dashboard_frame, "⚠️ Some files could not be unsorted.          ")
     if is_successful and not unsort_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "✔️ Files unsorted.")
+            dashboard_frame, "✔️ Files unsorted.                            ")
     if unsorted_file_count == 0 and deleted_folder_count == 0:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "ℹ️ Nothing to unsort.")
+            dashboard_frame, "ℹ️ Nothing to unsort.                         ")
     else:
         console.configure(state="normal")
         if state.console_placeholder_text:
@@ -113,16 +113,16 @@ def handle_delete_folders_button(parent_path_entry, dashboard_frame, console):
         parent_folder_path)
     if not is_successful and delete_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "❌ Failed to delete empty folders.")
+            dashboard_frame, "❌ Failed to delete empty folders.            ")
     if is_successful and delete_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "⚠️ Some folders could not be deleted.")
+            dashboard_frame, "⚠️ Some folders could not be deleted.         ")
     if is_successful and not delete_errors:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "✔️ Folders deleted.")
+            dashboard_frame, "✔️ Folders deleted.                           ")
     if deleted_folder_count == 0:
         components.create_dashboard_button_status_label(
-            dashboard_frame, "ℹ️ Nothing to delete.")
+            dashboard_frame, "ℹ️ Nothing to delete.                         ")
     else:
         console.configure(state="normal")
         if state.console_placeholder_text:
